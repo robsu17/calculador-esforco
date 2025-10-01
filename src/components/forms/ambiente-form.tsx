@@ -9,7 +9,11 @@ type FormType = {
     velocidadeDoVento: number;
 }
 
-export function AmbienteForm() {
+interface AmbienteProps {
+    setMassaEspecificaAr: (value: number) => void;
+}
+
+export function AmbienteForm({ setMassaEspecificaAr }: AmbienteProps) {
     const [field, setFields] = useState<FormType>({
         altitudeMedia: 70,
         temperatura: 15,
@@ -19,7 +23,7 @@ export function AmbienteForm() {
 
     const calculaTracaoInicial = () => {
         const massaEspecificaAr = (1.293 / (1 + 0.00367 * field.temperatura)) * ((16000 + (64 * field.temperatura) - field.altitudeMedia) / ((16000 + (64 * field.temperatura) + field.altitudeMedia)))
-        console.log(massaEspecificaAr)
+        setMassaEspecificaAr(massaEspecificaAr)
     }
 
     useEffect(() => {
