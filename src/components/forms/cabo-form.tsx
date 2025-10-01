@@ -1,8 +1,8 @@
-import { tiposDeCabos } from "@/data/cabos";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger } from "../ui/select";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
+import { cabos } from "@/data/cabos";
 
 export type CaboFormField = {
   vao: number;
@@ -24,7 +24,6 @@ export function CaboForm({ fields, setFields }: CaboFormProps) {
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-4 gap-3">
-          {/* Tipo do cabo */}
           <div className="space-y-3">
             <Label>Tipo do cabo</Label>
             <Select
@@ -35,16 +34,15 @@ export function CaboForm({ fields, setFields }: CaboFormProps) {
             >
               <SelectTrigger>{fields.tipoDeCabo}</SelectTrigger>
               <SelectContent className="w-full">
-                {tiposDeCabos.map((cabo) => (
-                  <SelectItem key={cabo} value={cabo}>
-                    {cabo}
+                {cabos.map((cabo, index) => (
+                  <SelectItem key={index} value={cabo.name}>
+                    {cabo.name}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </div>
 
-          {/* Vão */}
           <div className="space-y-3">
             <Label>Vão em (m)</Label>
             <Input
@@ -56,7 +54,6 @@ export function CaboForm({ fields, setFields }: CaboFormProps) {
             />
           </div>
 
-          {/* Ângulo */}
           <div className="space-y-3">
             <Label>Ângulo</Label>
             <Input
@@ -68,7 +65,6 @@ export function CaboForm({ fields, setFields }: CaboFormProps) {
             />
           </div>
 
-          {/* Porcentagem da Flecha */}
           <div className="space-y-3">
             <Label>Porcentagem da Flecha</Label>
             <Input

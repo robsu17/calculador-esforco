@@ -1,26 +1,36 @@
 import { useState } from "react"
 import { AmbienteForm } from "./components/forms/ambiente-form"
 import { CaboForm, CaboFormField } from "./components/forms/cabo-form"
-import { tiposDeCabos } from "./data/cabos";
+import { Button } from "./components/ui/button";
+import { cabos } from "./data/cabos";
+
+type ResultadosTracoesIniciais = {
+  [key: string]: number
+}
 
 export default function App() {
+  const [massaEspecificaAr, setMassaEspecificaAr] = useState(0)
   const [caboForms, setCaboForms] = useState<CaboFormField[]>([
     {
       angulo: 0,
       porcentagemDaFlecha: 0,
-      tipoDeCabo: tiposDeCabos[0],
-      vao: 0
-    },
-    {
-      angulo: 0,
-      porcentagemDaFlecha: 0,
-      tipoDeCabo: tiposDeCabos[0],
+      tipoDeCabo: cabos[0].name,
       vao: 0
     },
   ])
 
   const massaEspecificaResultado = (resultado: number) => {
-    //
+    setMassaEspecificaAr(resultado)
+  }
+
+  const calculaTracaoInicial = () => {
+    let resultadoTracaoInicial: ResultadosTracoesIniciais = {};
+    caboForms.forEach((caboForm, index) => {
+      const cabo = cabos.find(cabo => cabo.name === caboForm.tipoDeCabo) || cabos[0]
+      console.log(caboForm)
+      resultadoTracaoInicial[`cabo-${index}`] = (cabo?.weight * (caboForm.vao ** 2)) / (8 * (caboForm.porcentagemDaFlecha * caboForm.vao))
+    })
+    console.log(resultadoTracaoInicial)
   }
 
   return (
@@ -30,6 +40,21 @@ export default function App() {
           Cálculo de Esforço
         </h1>
         <div className="bg-white rounded-lg shadow-lg p-6 space-y-3">
+          <div className="flex justify-between">
+            <Button
+              onClick={() => setCaboForms(prev => {
+                return [...prev, {
+                  angulo: 0,
+                  porcentagemDaFlecha: 0,
+                  tipoDeCabo: cabos[0].name,
+                  vao: 0
+                }]
+              })}
+            >
+              Adicionar cabo
+            </Button>
+            <Button onClick={calculaTracaoInicial}>Calcular</Button>
+          </div>
           <AmbienteForm setMassaEspecificaAr={massaEspecificaResultado} />
           {caboForms.map((caboForm, index) => (
             <CaboForm
