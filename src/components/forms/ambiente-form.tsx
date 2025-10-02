@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Card, CardHeader, CardContent, CardTitle } from "../ui/card";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger } from "../ui/select";
 
 type FormType = {
     temperatura: number;
@@ -10,10 +11,11 @@ type FormType = {
 }
 
 interface AmbienteProps {
-    setMassaEspecificaAr: (value: number) => void;
+    setPressaoDinamicaRef: (value: number) => void;
+    setAlturaPoste: (value: number) => void;
 }
 
-export function AmbienteForm({ setMassaEspecificaAr }: AmbienteProps) {
+export function AmbienteForm({ setPressaoDinamicaRef }: AmbienteProps) {
     const [field, setFields] = useState<FormType>({
         altitudeMedia: 70,
         temperatura: 15,
@@ -21,13 +23,14 @@ export function AmbienteForm({ setMassaEspecificaAr }: AmbienteProps) {
     });
 
 
-    const calculaTracaoInicial = () => {
+    const calculaPressaoDinamicaRef = () => {
         const massaEspecificaAr = (1.293 / (1 + 0.00367 * field.temperatura)) * ((16000 + (64 * field.temperatura) - field.altitudeMedia) / ((16000 + (64 * field.temperatura) + field.altitudeMedia)))
-        setMassaEspecificaAr(massaEspecificaAr)
+        const pressaoDinamica = (massaEspecificaAr * (field.velocidadeDoVento ** 2)) / 2
+        setPressaoDinamicaRef(pressaoDinamica / 10)
     }
 
     useEffect(() => {
-        calculaTracaoInicial()
+        calculaPressaoDinamicaRef()
     }, [field])
 
     return (
@@ -63,18 +66,31 @@ export function AmbienteForm({ setMassaEspecificaAr }: AmbienteProps) {
                             }))}
                         />
                     </div>
-                </div>
-                <div className="space-y-2">
-                    <Label htmlFor="velocidadeDoVento">Velocidade do vento em m/s</Label>
-                    <Input
-                        id="velocidadeDoVento"
-                        type="number"
-                        defaultValue={field.velocidadeDoVento}
-                        onChange={(e) => setFields((state) => ({
-                            ...state,
-                            velocidadeDoVento: Number(e.target.value)
-                        }))}
-                    />
+                    <div className="space-y-2">
+                        <Label htmlFor="velocidadeDoVento">Velocidade do vento em m/s</Label>
+                        <Input
+                            id="velocidadeDoVento"
+                            type="number"
+                            defaultValue={field.velocidadeDoVento}
+                            onChange={(e) => setFields((state) => ({
+                                ...state,
+                                velocidadeDoVento: Number(e.target.value)
+                            }))}
+                        />
+                    </div>
+                    <div>
+                        <Label>Altura do poste</Label>
+                        <Select>
+                            <SelectTrigger>Selecione a altura do poste</SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value={"8"}>8 metros</SelectItem>
+                                <SelectItem value={"9"}>9 metros</SelectItem>
+                                <SelectItem value={"10"}>10 metros</SelectItem>
+                                <SelectItem value={"11"}>11 metros</SelectItem>
+                                <SelectItem value={"12"}>12 metros</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
                 </div>
             </CardContent>
         </Card>

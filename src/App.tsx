@@ -8,8 +8,17 @@ type ResultadosTracoesIniciais = {
   [key: string]: number
 }
 
+type CargaVento = {
+  [key: string]: number
+}
+
+type EsfocoTotais = {
+  [key: string]: number
+}
+
 export default function App() {
-  const [massaEspecificaAr, setMassaEspecificaAr] = useState(0)
+  const [pressaoDinamicaRef, setPressaoDinamicaRef] = useState(0)
+  const [alturaPoste, setAlturaPoste] = useState<number>()
   const [caboForms, setCaboForms] = useState<CaboFormField[]>([
     {
       angulo: 0,
@@ -19,18 +28,23 @@ export default function App() {
     },
   ])
 
-  const massaEspecificaResultado = (resultado: number) => {
-    setMassaEspecificaAr(resultado)
+  const pressaoDinamica = (resultado: number) => {
+    setPressaoDinamicaRef(resultado)
+  }
+
+  const handleSetAlturaPoste = (altura: number) => {
+    setAlturaPoste(altura)
   }
 
   const calculaTracaoInicial = () => {
-    let resultadoTracaoInicial: ResultadosTracoesIniciais = {};
+    let esforcosTotais: EsfocoTotais = {};
     caboForms.forEach((caboForm, index) => {
       const cabo = cabos.find(cabo => cabo.name === caboForm.tipoDeCabo) || cabos[0]
-      console.log(caboForm)
-      resultadoTracaoInicial[`cabo-${index}`] = (cabo?.weight * (caboForm.vao ** 2)) / (8 * (caboForm.porcentagemDaFlecha * caboForm.vao))
-    })
-    console.log(resultadoTracaoInicial)
+      const tracaoInicial = (cabo?.weight * (caboForm.vao ** 2)) / (8 * (caboForm.porcentagemDaFlecha * caboForm.vao))
+      const cargaDoVento = pressaoDinamicaRef * 1 * 1 * cabo.diameter * (caboForm.vao/2) * 1
+
+      esforcosTotais[`${cabo.name}-${index}`] = tracaoInicial + cargaDoVento;
+    });
   }
 
   return (
@@ -55,7 +69,7 @@ export default function App() {
             </Button>
             <Button onClick={calculaTracaoInicial}>Calcular</Button>
           </div>
-          <AmbienteForm setMassaEspecificaAr={massaEspecificaResultado} />
+          <AmbienteForm setAlturaPoste={handleSetAlturaPoste} setPressaoDinamicaRef={pressaoDinamica} />
           {caboForms.map((caboForm, index) => (
             <CaboForm
               key={index}
