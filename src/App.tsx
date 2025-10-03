@@ -3,6 +3,7 @@ import { AmbienteForm } from "./components/forms/ambiente-form"
 import { CaboForm, CaboFormField } from "./components/forms/cabo-form"
 import { Button } from "./components/ui/button";
 import { cabos } from "./data/cabos";
+import { postes } from "./data/poste";
 
 type ResultadosTracoesIniciais = {
   [key: string]: number
@@ -12,8 +13,12 @@ type CargaVento = {
   [key: string]: number
 }
 
-type EsfocoTotais = {
-  [key: string]: number
+type EsforcoCabo = {
+  [key: string]: {
+    esforcoTotal: number;
+    esforcoRefletidoX: number;
+    esforcoRefletidoY: number;
+  }
 }
 
 export default function App() {
@@ -36,15 +41,50 @@ export default function App() {
     setAlturaPoste(altura)
   }
 
-  const calculaTracaoInicial = () => {
-    let esforcosTotais: EsfocoTotais = {};
-    caboForms.forEach((caboForm, index) => {
-      const cabo = cabos.find(cabo => cabo.name === caboForm.tipoDeCabo) || cabos[0]
-      const tracaoInicial = (cabo?.weight * (caboForm.vao ** 2)) / (8 * (caboForm.porcentagemDaFlecha * caboForm.vao))
-      const cargaDoVento = pressaoDinamicaRef * 1 * 1 * cabo.diameter * (caboForm.vao/2) * 1
+  function grausParaRadianos(graus: number) {
+    return graus * (Math.PI / 180);
+  }
 
-      esforcosTotais[`${cabo.name}-${index}`] = tracaoInicial + cargaDoVento;
+  function radianosParaGraus(radianos: number) {
+  return radianos * (180 / Math.PI);
+}
+
+  const calculaTracaoInicial = () => {
+    let esforcosTotais: EsforcoCabo = {};
+    const poste = postes.find(poste => poste.altura === alturaPoste);
+
+    if (!poste) return;
+
+    caboForms.forEach((caboForm, index) => {
+      const cabo = cabos.find(cabo => cabo.name === caboForm.tipoDeCabo) || cabos[0];
+      const tracaoInicial = (cabo?.weight * (caboForm.vao ** 2)) / (8 * (caboForm.porcentagemDaFlecha * caboForm.vao));
+      const cargaDoVento = pressaoDinamicaRef * 1 * 1 * cabo.diameter * (caboForm.vao / 2) * 1;
+      const esforcoTotal = tracaoInicial + cargaDoVento;
+      const esforcoRefletido = esforcoTotal * poste.fatorMultiplicacao;
+      const esforcoRefletidoX = Math.cos(grausParaRadianos(caboForm.angulo)) * esforcoRefletido;
+      const esforcoRefletidoY = Math.sin(grausParaRadianos(caboForm.angulo)) * esforcoRefletido;
+
+      esforcosTotais[`${cabo.name}_${index}`] = {
+        esforcoTotal,
+        esforcoRefletidoX,
+        esforcoRefletidoY
+      };
     });
+
+    let esforcoResultanteX = 0;
+    let esforcoResultanteY = 0;
+
+    Object.keys(esforcosTotais).forEach(cabo => {
+      esforcoResultanteX += esforcosTotais[cabo].esforcoRefletidoX;
+      esforcoResultanteY += esforcosTotais[cabo].esforcoRefletidoY;
+    })
+
+    const esforcoResultante = Math.sqrt((esforcoResultanteX ** 2) + (esforcoResultanteY ** 2) - 2 * esforcoResultanteX * esforcoResultanteY * Math.cos(grausParaRadianos(90)) )
+    const anguloResultante = Math.acos(
+      ((esforcoResultante ** 2) + (esforcoResultanteX ** 2) - (esforcoResultanteY ** 2)) / (2 * esforcoResultante * esforcoResultanteX)
+    );
+
+    console.log(esforcoResultanteX, esforcoResultanteY, esforcoResultante, radianosParaGraus(anguloResultante))
   }
 
   return (
@@ -73,6 +113,7 @@ export default function App() {
           {caboForms.map((caboForm, index) => (
             <CaboForm
               key={index}
+              index={index}
               fields={caboForm}
               setFields={(newFields) => {
                 const updated = [...caboForms];

@@ -12,15 +12,18 @@ export type CaboFormField = {
 };
 
 interface CaboFormProps {
+  index: number;
   fields: CaboFormField;
   setFields: (value: CaboFormField) => void;
 }
 
-export function CaboForm({ fields, setFields }: CaboFormProps) {
+export function CaboForm({ index, fields, setFields }: CaboFormProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Cabos</CardTitle>
+        <CardTitle>
+          Cabo {(index + 1).toString().padStart(2, "0")}
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-4 gap-3">
@@ -32,8 +35,8 @@ export function CaboForm({ fields, setFields }: CaboFormProps) {
                 setFields({ ...fields, tipoDeCabo: value })
               }
             >
-              <SelectTrigger>{fields.tipoDeCabo}</SelectTrigger>
-              <SelectContent className="w-full">
+              <SelectTrigger className="w-full">{fields.tipoDeCabo}</SelectTrigger>
+              <SelectContent >
                 {cabos.map((cabo, index) => (
                   <SelectItem key={index} value={cabo.name}>
                     {cabo.name}
