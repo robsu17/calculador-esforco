@@ -99,10 +99,10 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+    <div className="min-h-screen bg-gradient-to-br bg-emerald-700 flex items-center justify-center">
       <div className="max-w-6xl w-full mx-auto p-8">
         {/* Título principal */}
-        <h1 className="text-4xl font-extrabold text-center text-gray-800 mb-10 tracking-tight">
+        <h1 className="text-4xl font-extrabold text-center text-gray-100 mb-10 tracking-tight">
           ⚡ Cálculo de Esforço em Postes
         </h1>
 
@@ -116,6 +116,7 @@ export default function App() {
               <div className="flex justify-between gap-3">
                 <Button
                   variant="outline"
+                  className="cursor-pointer"
                   onClick={() =>
                     setCaboForms(prev => [
                       ...prev,
@@ -130,7 +131,7 @@ export default function App() {
                 >
                   ➕ Adicionar cabo
                 </Button>
-                <Button onClick={calculaTracaoInicial} className="bg-blue-600 hover:bg-blue-700 text-white">
+                <Button onClick={calculaTracaoInicial} className="bg-blue-600 hover:bg-blue-700 text-white cursor-pointer">
                   Calcular
                 </Button>
               </div>

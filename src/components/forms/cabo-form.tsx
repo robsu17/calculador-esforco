@@ -26,7 +26,7 @@ export function CaboForm({ index, fields, setFields }: CaboFormProps) {
         </CardTitle>
       </CardHeader>
       <CardContent className="pt-4">
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
           {/* Tipo do Cabo */}
           <div className="flex flex-col space-y-1">
             <Label>Tipo do cabo</Label>
