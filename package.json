@@ -14,8 +14,17 @@
   },
   "build": {
     "appId": "com.robsu17.calc_esforco",
+    "productName": "Calculador de Esforço",
+    "files": [
+      "dist/**/*",
+      "main.cjs"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    },
     "win": {
-      "target": "nsis"
+      "target": "nsis",
+      "icon": "assets/vite.svg"
     }
   },
   "dependencies": {
