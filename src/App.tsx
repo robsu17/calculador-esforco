@@ -4,14 +4,8 @@ import { CaboForm, CaboFormField } from "./components/forms/cabo-form"
 import { Button } from "./components/ui/button";
 import { cabos } from "./data/cabos";
 import { postes } from "./data/poste";
-
-type ResultadosTracoesIniciais = {
-  [key: string]: number
-}
-
-type CargaVento = {
-  [key: string]: number
-}
+import { Card, CardContent, CardHeader, CardTitle } from "./components/ui/card";
+import { ResultadoFinalTable } from "./components/ResultadoFinalTable";
 
 type EsforcoCabo = {
   [key: string]: {
@@ -19,6 +13,13 @@ type EsforcoCabo = {
     esforcoRefletidoX: number;
     esforcoRefletidoY: number;
   }
+}
+
+export type ResultadoFinal = {
+  esforcoResultanteX: number;
+  esforcoResultanteY: number;
+  esforcoResultante: number;
+  anguloResultante: number;
 }
 
 export default function App() {
@@ -31,7 +32,13 @@ export default function App() {
       tipoDeCabo: cabos[0].name,
       vao: 0
     },
-  ])
+  ]);
+  const [resultadoFinal, setResultadoFinal] = useState<ResultadoFinal>({
+    anguloResultante: 0,
+    esforcoResultante: 0,
+    esforcoResultanteX: 0,
+    esforcoResultanteY: 0,
+  })
 
   const pressaoDinamica = (resultado: number) => {
     setPressaoDinamicaRef(resultado)
@@ -46,8 +53,8 @@ export default function App() {
   }
 
   function radianosParaGraus(radianos: number) {
-  return radianos * (180 / Math.PI);
-}
+    return radianos * (180 / Math.PI);
+  }
 
   const calculaTracaoInicial = () => {
     let esforcosTotais: EsforcoCabo = {};
@@ -79,12 +86,17 @@ export default function App() {
       esforcoResultanteY += esforcosTotais[cabo].esforcoRefletidoY;
     })
 
-    const esforcoResultante = Math.sqrt((esforcoResultanteX ** 2) + (esforcoResultanteY ** 2) - 2 * esforcoResultanteX * esforcoResultanteY * Math.cos(grausParaRadianos(90)) )
+    const esforcoResultante = Math.sqrt((esforcoResultanteX ** 2) + (esforcoResultanteY ** 2) - 2 * esforcoResultanteX * esforcoResultanteY * Math.cos(grausParaRadianos(90)))
     const anguloResultante = Math.acos(
       ((esforcoResultante ** 2) + (esforcoResultanteX ** 2) - (esforcoResultanteY ** 2)) / (2 * esforcoResultante * esforcoResultanteX)
     );
 
-    console.log(esforcoResultanteX, esforcoResultanteY, esforcoResultante, radianosParaGraus(anguloResultante))
+    setResultadoFinal({
+      anguloResultante: radianosParaGraus(anguloResultante),
+      esforcoResultante,
+      esforcoResultanteX,
+      esforcoResultanteY
+    })
   }
 
   return (
@@ -123,6 +135,17 @@ export default function App() {
             />
           ))}
         </div>
+        {
+          resultadoFinal.esforcoResultante &&
+            <Card className="mt-4">
+              <CardHeader>
+                <CardTitle>Resultado Final</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ResultadoFinalTable dados={resultadoFinal} />
+              </CardContent>
+            </Card>
+        }
       </div>
     </div>
   )
