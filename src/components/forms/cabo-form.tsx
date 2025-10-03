@@ -19,15 +19,16 @@ interface CaboFormProps {
 
 export function CaboForm({ index, fields, setFields }: CaboFormProps) {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>
+    <Card className="rounded-xl shadow-md border border-gray-200">
+      <CardHeader className="pb-3 border-b">
+        <CardTitle className="text-lg font-semibold text-gray-700">
           Cabo {(index + 1).toString().padStart(2, "0")}
         </CardTitle>
       </CardHeader>
-      <CardContent>
-        <div className="grid grid-cols-4 gap-3">
-          <div className="space-y-3">
+      <CardContent className="pt-4">
+        <div className="grid grid-cols-2 gap-3">
+          {/* Tipo do Cabo */}
+          <div className="flex flex-col space-y-1">
             <Label>Tipo do cabo</Label>
             <Select
               value={fields.tipoDeCabo}
@@ -35,10 +36,10 @@ export function CaboForm({ index, fields, setFields }: CaboFormProps) {
                 setFields({ ...fields, tipoDeCabo: value })
               }
             >
-              <SelectTrigger className="w-full">{fields.tipoDeCabo}</SelectTrigger>
-              <SelectContent >
-                {cabos.map((cabo, index) => (
-                  <SelectItem key={index} value={cabo.name}>
+              <SelectTrigger className="w-full min-w-[120px]">{fields.tipoDeCabo}</SelectTrigger>
+              <SelectContent>
+                {cabos.map((cabo, idx) => (
+                  <SelectItem key={idx} value={cabo.name}>
                     {cabo.name}
                   </SelectItem>
                 ))}
@@ -46,7 +47,8 @@ export function CaboForm({ index, fields, setFields }: CaboFormProps) {
             </Select>
           </div>
 
-          <div className="space-y-3">
+          {/* Vão */}
+          <div className="flex flex-col space-y-1">
             <Label>Vão em (m)</Label>
             <Input
               type="number"
@@ -54,10 +56,12 @@ export function CaboForm({ index, fields, setFields }: CaboFormProps) {
               onChange={(e) =>
                 setFields({ ...fields, vao: Number(e.target.value) })
               }
+              className="w-full min-w-[80px]"
             />
           </div>
 
-          <div className="space-y-3">
+          {/* Ângulo */}
+          <div className="flex flex-col space-y-1">
             <Label>Ângulo</Label>
             <Input
               type="number"
@@ -65,10 +69,12 @@ export function CaboForm({ index, fields, setFields }: CaboFormProps) {
               onChange={(e) =>
                 setFields({ ...fields, angulo: Number(e.target.value) })
               }
+              className="w-full min-w-[80px]"
             />
           </div>
 
-          <div className="space-y-3">
+          {/* Porcentagem da Flecha */}
+          <div className="flex flex-col space-y-1">
             <Label>Porcentagem da Flecha</Label>
             <Input
               type="number"
@@ -80,6 +86,7 @@ export function CaboForm({ index, fields, setFields }: CaboFormProps) {
                   porcentagemDaFlecha: parseFloat(e.target.value),
                 })
               }
+              className="w-full min-w-[80px]"
             />
           </div>
         </div>

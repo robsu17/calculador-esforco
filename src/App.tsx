@@ -1,3 +1,4 @@
+
 import { useState } from "react"
 import { AmbienteForm } from "./components/forms/ambiente-form"
 import { CaboForm, CaboFormField } from "./components/forms/cabo-form"
@@ -63,9 +64,9 @@ export default function App() {
     if (!poste) return;
 
     caboForms.forEach((caboForm, index) => {
-      const cabo = cabos.find(cabo => cabo.name === caboForm.tipoDeCabo) || cabos[0];
+      const cabo = cabos.find(c => c.name === caboForm.tipoDeCabo) || cabos[0];
       const tracaoInicial = (cabo?.weight * (caboForm.vao ** 2)) / (8 * (caboForm.porcentagemDaFlecha * caboForm.vao));
-      const cargaDoVento = pressaoDinamicaRef * 1 * 1 * cabo.diameter * (caboForm.vao / 2) * 1;
+      const cargaDoVento = pressaoDinamicaRef * cabo.diameter * (caboForm.vao / 2);
       const esforcoTotal = tracaoInicial + cargaDoVento;
       const esforcoRefletido = esforcoTotal * poste.fatorMultiplicacao;
       const esforcoRefletidoX = Math.cos(grausParaRadianos(caboForm.angulo)) * esforcoRefletido;
@@ -86,10 +87,8 @@ export default function App() {
       esforcoResultanteY += esforcosTotais[cabo].esforcoRefletidoY;
     })
 
-    const esforcoResultante = Math.sqrt((esforcoResultanteX ** 2) + (esforcoResultanteY ** 2) - 2 * esforcoResultanteX * esforcoResultanteY * Math.cos(grausParaRadianos(90)))
-    const anguloResultante = Math.acos(
-      ((esforcoResultante ** 2) + (esforcoResultanteX ** 2) - (esforcoResultanteY ** 2)) / (2 * esforcoResultante * esforcoResultanteX)
-    );
+    const esforcoResultante = Math.sqrt(esforcoResultanteX ** 2 + esforcoResultanteY ** 2);
+    const anguloResultante = Math.atan2(esforcoResultanteY, esforcoResultanteX);
 
     setResultadoFinal({
       anguloResultante: radianosParaGraus(anguloResultante),
@@ -100,52 +99,72 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="max-w-4xl w-full mx-auto p-8">
-        <h1 className="text-4xl font-bold text-center text-gray-800 mb-8">
-          Cálculo de Esforço
+    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+      <div className="max-w-6xl w-full mx-auto p-8">
+        {/* Título principal */}
+        <h1 className="text-4xl font-extrabold text-center text-gray-800 mb-10 tracking-tight">
+          ⚡ Cálculo de Esforço em Postes
         </h1>
-        <div className="bg-white rounded-lg shadow-lg p-6 space-y-3">
-          <div className="flex justify-between">
-            <Button
-              onClick={() => setCaboForms(prev => {
-                return [...prev, {
-                  angulo: 0,
-                  porcentagemDaFlecha: 0,
-                  tipoDeCabo: cabos[0].name,
-                  vao: 0
-                }]
-              })}
-            >
-              Adicionar cabo
-            </Button>
-            <Button onClick={calculaTracaoInicial}>Calcular</Button>
-          </div>
-          <AmbienteForm setAlturaPoste={handleSetAlturaPoste} setPressaoDinamicaRef={pressaoDinamica} />
-          {caboForms.map((caboForm, index) => (
-            <CaboForm
-              key={index}
-              index={index}
-              fields={caboForm}
-              setFields={(newFields) => {
-                const updated = [...caboForms];
-                updated[index] = newFields;
-                setCaboForms(updated);
-              }}
-            />
-          ))}
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Card de Entrada */}
+          <Card className="bg-white rounded-2xl shadow-xl border border-gray-200">
+            <CardHeader className="pb-4 border-b">
+              <CardTitle className="text-lg font-semibold text-gray-700">Configuração do Ambiente</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="flex justify-between gap-3">
+                <Button
+                  variant="outline"
+                  onClick={() =>
+                    setCaboForms(prev => [
+                      ...prev,
+                      {
+                        angulo: 0,
+                        porcentagemDaFlecha: 0,
+                        tipoDeCabo: cabos[0].name,
+                        vao: 0
+                      },
+                    ])
+                  }
+                >
+                  ➕ Adicionar cabo
+                </Button>
+                <Button onClick={calculaTracaoInicial} className="bg-blue-600 hover:bg-blue-700 text-white">
+                  Calcular
+                </Button>
+              </div>
+
+              <AmbienteForm setAlturaPoste={handleSetAlturaPoste} setPressaoDinamicaRef={pressaoDinamica} />
+
+              <div className="space-y-5">
+                {caboForms.map((caboForm, index) => (
+                  <div key={index} className="p-4 rounded-xl border border-gray-200 shadow-sm bg-gray-50">
+                    <CaboForm
+                      index={index}
+                      fields={caboForm}
+                      setFields={(newFields) => {
+                        const updated = [...caboForms];
+                        updated[index] = newFields;
+                        setCaboForms(updated);
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Card de Resultado */}
+          <Card className="bg-white rounded-2xl shadow-xl border border-gray-200">
+            <CardHeader className="pb-4 border-b">
+              <CardTitle className="text-lg font-semibold text-gray-700">Resultado Final</CardTitle>
+            </CardHeader>
+            <CardContent className="pt-6">
+              <ResultadoFinalTable dados={resultadoFinal} />
+            </CardContent>
+          </Card>
         </div>
-        {
-          resultadoFinal.esforcoResultante &&
-            <Card className="mt-4">
-              <CardHeader>
-                <CardTitle>Resultado Final</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ResultadoFinalTable dados={resultadoFinal} />
-              </CardContent>
-            </Card>
-        }
       </div>
     </div>
   )

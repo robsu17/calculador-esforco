@@ -49,7 +49,7 @@ export function AmbienteForm({ setPressaoDinamicaRef, setAlturaPoste }: Ambiente
             <CardContent className="space-y-3">
                 <div className="grid grid-cols-2 gap-3">
                     <div className="space-y-2">
-                        <Label htmlFor="temperatura">Temperatura coincidente em (°C)</Label>
+                        <Label htmlFor="temperatura">Temperatura coincidente (°C)</Label>
                         <Input
                             id="temperatura"
                             type="number"
@@ -61,7 +61,7 @@ export function AmbienteForm({ setPressaoDinamicaRef, setAlturaPoste }: Ambiente
                         />
                     </div>
                     <div className="space-y-2">
-                        <Label htmlFor="altitude">Altitude média da região em (m)</Label>
+                        <Label htmlFor="altitude">Altitude média da região (m)</Label>
                         <Input
                             id="altitude"
                             type="number"
@@ -73,7 +73,7 @@ export function AmbienteForm({ setPressaoDinamicaRef, setAlturaPoste }: Ambiente
                         />
                     </div>
                     <div className="space-y-2">
-                        <Label htmlFor="velocidadeDoVento">Velocidade do vento em m/s</Label>
+                        <Label htmlFor="velocidadeDoVento">Velocidade do vento (m/s)</Label>
                         <Input
                             id="velocidadeDoVento"
                             type="number"
@@ -85,7 +85,7 @@ export function AmbienteForm({ setPressaoDinamicaRef, setAlturaPoste }: Ambiente
                         />
                     </div>
                     <div className="space-y-2">
-                        <Label>Altura do poste</Label>
+                        <Label>Altura do poste (m)</Label>
                         <Select
                             defaultValue="9" // aqui você define o valor inicial selecionado
                             onValueChange={(value) =>
