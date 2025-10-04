@@ -21,10 +21,10 @@ export function DiagramaPoste({ caboForms, resultadoFinal, esforcosCabo, esforco
     const grausParaRadianos = (graus: number) => graus * (Math.PI / 180);
 
     // Função para calcular o comprimento do vetor de força (proporcional ao esforço)
-    const calcularComprimentoVetor = (esforco: number, maxEsforco: number) => {
-        if (maxEsforco === 0) return 0;
-        return (esforco / maxEsforco) * maxForceLength;
-    };
+    // const calcularComprimentoVetor = (esforco: number, maxEsforco: number) => {
+    //     if (maxEsforco === 0) return 0;
+    //     return (esforco / maxEsforco) * maxForceLength;
+    // };
 
     // Encontrar o esforço máximo para normalizar os vetores
     const esforcosRefletidos = Object.values(esforcosCabo).map(e =>
@@ -114,8 +114,8 @@ export function DiagramaPoste({ caboForms, resultadoFinal, esforcosCabo, esforco
                         const comprimentoCaboPixels = vaoMetros / escalaMetrosPorPixel;
 
                         // Calcular comprimento do vetor de força proporcional ao esforço
-                        const esforcoTotal = Math.sqrt(esforcoData.esforcoRefletidoX ** 2 + esforcoData.esforcoRefletidoY ** 2);
-                        const comprimentoVetor = calcularComprimentoVetor(esforcoTotal, maxEsforcoRefletido);
+                        // const esforcoTotal = Math.sqrt(esforcoData.esforcoRefletidoX ** 2 + esforcoData.esforcoRefletidoY ** 2);
+                        // const comprimentoVetor = calcularComprimentoVetor(esforcoTotal, maxEsforcoRefletido);
 
                         // Pontos de conexão no poste (vista superior)
                         const startX = centerX; // Centro do poste

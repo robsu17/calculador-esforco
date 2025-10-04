@@ -25,6 +25,9 @@
     "win": {
       "target": "nsis",
       "icon": "assets/vite.svg"
+    },
+    "mac": {
+      "icon": "assets/vite.svg"
     }
   },
   "dependencies": {
