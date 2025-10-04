@@ -49,7 +49,7 @@ export function CaboForm({ index, fields, setFields }: CaboFormProps) {
 
           {/* Vão */}
           <div className="flex flex-col space-y-1">
-            <Label>Vão em (m)</Label>
+            <Label>Vão (m)</Label>
             <Input
               type="number"
               value={fields.vao}
@@ -62,7 +62,7 @@ export function CaboForm({ index, fields, setFields }: CaboFormProps) {
 
           {/* Ângulo */}
           <div className="flex flex-col space-y-1">
-            <Label>Ângulo</Label>
+            <Label>Ângulo (°)</Label>
             <Input
               type="number"
               value={fields.angulo}

@@ -7,6 +7,7 @@ import { cabos } from "./data/cabos";
 import { postes } from "./data/poste";
 import { Card, CardContent, CardHeader, CardTitle } from "./components/ui/card";
 import { ResultadoFinalTable } from "./components/ResultadoFinalTable";
+import { DiagramaPoste } from "./components/DiagramaPoste";
 
 type EsforcoCabo = {
   [key: string]: {
@@ -21,6 +22,14 @@ export type ResultadoFinal = {
   esforcoResultanteY: number;
   esforcoResultante: number;
   anguloResultante: number;
+}
+
+export type EsforcoCaboIndividual = {
+  [key: string]: {
+    esforcoTotal: number;
+    esforcoRefletidoX: number;
+    esforcoRefletidoY: number;
+  }
 }
 
 export default function App() {
@@ -40,6 +49,8 @@ export default function App() {
     esforcoResultanteX: 0,
     esforcoResultanteY: 0,
   })
+  const [esforcosCabo, setEsforcosCabo] = useState<EsforcoCaboIndividual>({})
+  const [esforcoPoste, setEsforcoPoste] = useState<number>(300)
 
   const pressaoDinamica = (resultado: number) => {
     setPressaoDinamicaRef(resultado)
@@ -55,6 +66,10 @@ export default function App() {
 
   function radianosParaGraus(radianos: number) {
     return radianos * (180 / Math.PI);
+  }
+
+  const handleSetEsforcoPoste = (esforco: number) => {
+    setEsforcoPoste(esforco)
   }
 
   const calculaTracaoInicial = () => {
@@ -90,6 +105,7 @@ export default function App() {
     const esforcoResultante = Math.sqrt(esforcoResultanteX ** 2 + esforcoResultanteY ** 2);
     const anguloResultante = Math.atan2(esforcoResultanteY, esforcoResultanteX);
 
+    setEsforcosCabo(esforcosTotais);
     setResultadoFinal({
       anguloResultante: radianosParaGraus(anguloResultante),
       esforcoResultante,
@@ -103,7 +119,7 @@ export default function App() {
       <div className="max-w-6xl w-full mx-auto p-8">
         {/* Título principal */}
         <h1 className="text-4xl font-extrabold text-center text-gray-100 mb-10 tracking-tight">
-          ⚡ Cálculo de Esforço em Postes
+          Cálculo de Esforço em Postes
         </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -136,7 +152,11 @@ export default function App() {
                 </Button>
               </div>
 
-              <AmbienteForm setAlturaPoste={handleSetAlturaPoste} setPressaoDinamicaRef={pressaoDinamica} />
+              <AmbienteForm
+                setAlturaPoste={handleSetAlturaPoste}
+                setPressaoDinamicaRef={pressaoDinamica}
+                setEsforcoPoste={handleSetEsforcoPoste}
+              />
 
               <div className="space-y-5">
                 {caboForms.map((caboForm, index) => (
@@ -161,8 +181,14 @@ export default function App() {
             <CardHeader className="pb-4 border-b">
               <CardTitle className="text-lg font-semibold text-gray-700">Resultado Final</CardTitle>
             </CardHeader>
-            <CardContent className="pt-6">
+            <CardContent className="pt-6 space-y-6">
               <ResultadoFinalTable dados={resultadoFinal} />
+              <DiagramaPoste
+                caboForms={caboForms}
+                resultadoFinal={resultadoFinal}
+                esforcosCabo={esforcosCabo}
+                esforcoPoste={esforcoPoste}
+              />
             </CardContent>
           </Card>
         </div>

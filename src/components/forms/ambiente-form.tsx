@@ -9,19 +9,22 @@ type FormType = {
     altitudeMedia: number;
     velocidadeDoVento: number;
     alturaPoste: number;
+    esforcoPoste: number;
 }
 
 interface AmbienteProps {
     setPressaoDinamicaRef: (value: number) => void;
     setAlturaPoste: (value: number) => void;
+    setEsforcoPoste: (value: number) => void;
 }
 
-export function AmbienteForm({ setPressaoDinamicaRef, setAlturaPoste }: AmbienteProps) {
+export function AmbienteForm({ setPressaoDinamicaRef, setAlturaPoste, setEsforcoPoste }: AmbienteProps) {
     const [field, setFields] = useState<FormType>({
         altitudeMedia: 70,
         temperatura: 15,
         velocidadeDoVento: 20,
-        alturaPoste: 9
+        alturaPoste: 9,
+        esforcoPoste: 300
     });
 
 
@@ -38,6 +41,10 @@ export function AmbienteForm({ setPressaoDinamicaRef, setAlturaPoste }: Ambiente
     useEffect(() => {
         setAlturaPoste(field.alturaPoste)
     }, [field.alturaPoste])
+
+    useEffect(() => {
+        setEsforcoPoste(field.esforcoPoste)
+    }, [field.esforcoPoste])
 
     return (
         <Card>
@@ -99,14 +106,41 @@ export function AmbienteForm({ setPressaoDinamicaRef, setAlturaPoste }: Ambiente
                                 <SelectValue placeholder="Selecione a altura do poste" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="8">8 metros</SelectItem>
-                                <SelectItem value="9">9 metros</SelectItem>
-                                <SelectItem value="10">10 metros</SelectItem>
-                                <SelectItem value="11">11 metros</SelectItem>
-                                <SelectItem value="12">12 metros</SelectItem>
+                                <SelectItem value="8">8</SelectItem>
+                                <SelectItem value="9">9</SelectItem>
+                                <SelectItem value="10">10</SelectItem>
+                                <SelectItem value="11">11</SelectItem>
+                                <SelectItem value="12">12</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
+                </div>
+                <div className="space-y-2">
+                    <Label>Esforço do poste (daN)</Label>
+                    <Select
+                        defaultValue={field.esforcoPoste.toString()}
+                        onValueChange={(value) =>
+                            setFields((state) => ({
+                                ...state,
+                                esforcoPoste: Number(value),
+                            }))
+                        }
+                    >
+                        <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Selecione o esforço do poste" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="150">150</SelectItem>
+                            <SelectItem value="200">200</SelectItem>
+                            <SelectItem value="300">300</SelectItem>
+                            <SelectItem value="400">400</SelectItem>
+                            <SelectItem value="500">500</SelectItem>
+                            <SelectItem value="600">600</SelectItem>
+                            <SelectItem value="900">900</SelectItem>
+                            <SelectItem value="1000">1000</SelectItem>
+                            <SelectItem value="1500">1500</SelectItem>
+                        </SelectContent>
+                    </Select>
                 </div>
             </CardContent>
         </Card>
