@@ -5,7 +5,7 @@ function createWindow() {
   const win = new BrowserWindow({
     width: 800,
     height: 600,
-    icon: path.join(__dirname, "assets", "agil.svg"),
+    icon: path.join(__dirname, "assets", "agil.ico"),
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
