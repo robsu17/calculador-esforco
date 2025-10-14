@@ -3,8 +3,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger } from "../ui/select";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { cabos } from "@/data/cabos";
+import { Button } from "../ui/button";
 
 export type CaboFormField = {
+  id: string;
   vao: number;
   angulo: number;
   porcentagemDaFlecha: number;
@@ -12,22 +14,31 @@ export type CaboFormField = {
 };
 
 interface CaboFormProps {
+  id: string;
   index: number;
   fields: CaboFormField;
   setFields: (value: CaboFormField) => void;
+  removeCabo: (id: string) => void;
 }
 
-export function CaboForm({ index, fields, setFields }: CaboFormProps) {
+export function CaboForm({ id, fields, setFields, removeCabo }: CaboFormProps) {
+
+  const handleRemoveCabo = () => {
+    removeCabo(id)
+  }
+
   return (
     <Card className="rounded-xl shadow-md border border-gray-200">
       <CardHeader className="pb-3 border-b">
-        <CardTitle className="text-lg font-semibold text-gray-700">
-          Cabo {(index + 1).toString().padStart(2, "0")}
+        <CardTitle className="text-lg font-semibold text-gray-700 flex items-center justify-between">
+          Cabo #{id.slice(0, 4)}
+          <Button onClick={handleRemoveCabo} variant="destructive" className="cursor-pointer">
+            Remover
+          </Button>
         </CardTitle>
       </CardHeader>
       <CardContent className="pt-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-          {/* Tipo do Cabo */}
           <div className="flex flex-col space-y-1">
             <Label>Tipo do cabo</Label>
             <Select

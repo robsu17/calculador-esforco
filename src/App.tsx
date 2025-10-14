@@ -8,6 +8,7 @@ import { postes } from "./data/poste";
 import { Card, CardContent, CardHeader, CardTitle } from "./components/ui/card";
 import { ResultadoFinalTable } from "./components/ResultadoFinalTable";
 import { DiagramaPoste } from "./components/DiagramaPoste";
+import { v4 as uuidv4 } from 'uuid';
 
 type EsforcoCabo = {
   [key: string]: {
@@ -36,13 +37,7 @@ export default function App() {
   const [pressaoDinamicaRef, setPressaoDinamicaRef] = useState(0)
   const [alturaPoste, setAlturaPoste] = useState<number>()
   const [caboForms, setCaboForms] = useState<CaboFormField[]>([
-    {
-      angulo: 0,
-      porcentagemDaFlecha: 0,
-      tipoDeCabo: cabos[0].name,
-      vao: 0
-    },
-  ]);
+]);
   const [resultadoFinal, setResultadoFinal] = useState<ResultadoFinal>({
     anguloResultante: 0,
     esforcoResultante: 0,
@@ -51,6 +46,11 @@ export default function App() {
   })
   const [esforcosCabo, setEsforcosCabo] = useState<EsforcoCaboIndividual>({})
   const [esforcoPoste, setEsforcoPoste] = useState<number>(300)
+
+  const removeCabo = (id: string) => {
+    const cabosFiltered = caboForms.filter((value) => value.id !== id);
+    setCaboForms(cabosFiltered)
+  }
 
   const pressaoDinamica = (resultado: number) => {
     setPressaoDinamicaRef(resultado)
@@ -73,6 +73,10 @@ export default function App() {
   }
 
   const calculaTracaoInicial = () => {
+    if (caboForms.length === 0) {
+      alert('É preciso de pelo menos 1 cabo para realizar o calculo!')
+    }
+
     let esforcosTotais: EsforcoCabo = {};
     const poste = postes.find(poste => poste.altura === alturaPoste);
 
@@ -117,13 +121,11 @@ export default function App() {
   return (
     <div className="min-h-screen bg-gradient-to-br bg-emerald-700 flex items-center justify-center">
       <div className="max-w-6xl w-full mx-auto p-8">
-        {/* Título principal */}
         <h1 className="text-4xl font-extrabold text-center text-gray-100 mb-10 tracking-tight">
           Cálculo de Esforço em Postes
         </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Card de Entrada */}
           <Card className="bg-white rounded-2xl shadow-xl border border-gray-200">
             <CardHeader className="pb-4 border-b">
               <CardTitle className="text-lg font-semibold text-gray-700">Configuração do Ambiente</CardTitle>
@@ -137,6 +139,7 @@ export default function App() {
                     setCaboForms(prev => [
                       ...prev,
                       {
+                        id: uuidv4(),
                         angulo: 0,
                         porcentagemDaFlecha: 0,
                         tipoDeCabo: cabos[0].name,
@@ -160,13 +163,16 @@ export default function App() {
 
               <div className="space-y-5">
                 {caboForms.map((caboForm, index) => (
-                  <div key={index} className="p-4 rounded-xl border border-gray-200 shadow-sm bg-gray-50">
+                  <div key={caboForm.id} className="p-4 rounded-xl border border-gray-200 shadow-sm bg-gray-50">
                     <CaboForm
+                      id={caboForm.id}
                       index={index}
                       fields={caboForm}
+                      removeCabo={removeCabo}
                       setFields={(newFields) => {
                         const updated = [...caboForms];
-                        updated[index] = newFields;
+                        // preserve existing id and merge changes
+                        updated[index] = { ...updated[index], ...newFields, id: updated[index].id };
                         setCaboForms(updated);
                       }}
                     />
