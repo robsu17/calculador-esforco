@@ -8,7 +8,7 @@ import { postes } from "./data/poste";
 import { Card, CardContent, CardHeader, CardTitle } from "./components/ui/card";
 import { ResultadoFinalTable } from "./components/ResultadoFinalTable";
 import { DiagramaPoste } from "./components/DiagramaPoste";
-import { v4 as uuidv4 } from 'uuid';
+import { useRef } from 'react'
 
 type EsforcoCabo = {
   [key: string]: {
@@ -46,6 +46,7 @@ export default function App() {
   })
   const [esforcosCabo, setEsforcosCabo] = useState<EsforcoCaboIndividual>({})
   const [esforcoPoste, setEsforcoPoste] = useState<number>(300)
+  const caboIdCounter = useRef(0)
 
   const removeCabo = (id: string) => {
     const cabosFiltered = caboForms.filter((value) => value.id !== id);
@@ -135,18 +136,20 @@ export default function App() {
                 <Button
                   variant="outline"
                   className="cursor-pointer"
-                  onClick={() =>
+                  onClick={() => {
+                    caboIdCounter.current += 1
+                    const newId = `cabo_${caboIdCounter.current}`
                     setCaboForms(prev => [
                       ...prev,
                       {
-                        id: uuidv4(),
+                        id: newId,
                         angulo: 0,
                         porcentagemDaFlecha: 0,
                         tipoDeCabo: cabos[0].name,
                         vao: 0
                       },
                     ])
-                  }
+                  }}
                 >
                   ➕ Adicionar cabo
                 </Button>

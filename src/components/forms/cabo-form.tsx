@@ -31,7 +31,7 @@ export function CaboForm({ id, fields, setFields, removeCabo }: CaboFormProps) {
     <Card className="rounded-xl shadow-md border border-gray-200">
       <CardHeader className="pb-3 border-b">
         <CardTitle className="text-lg font-semibold text-gray-700 flex items-center justify-between">
-          Cabo #{id.slice(0, 4)}
+          {id}
           <Button onClick={handleRemoveCabo} variant="destructive" className="cursor-pointer">
             Remover
           </Button>
