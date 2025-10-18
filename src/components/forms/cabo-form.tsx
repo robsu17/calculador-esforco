@@ -6,7 +6,7 @@ import { cabos } from "@/data/cabos";
 import { Button } from "../ui/button";
 
 export type CaboFormField = {
-  id: string;
+  id: number;
   vao: number;
   angulo: number;
   porcentagemDaFlecha: number;
@@ -14,11 +14,11 @@ export type CaboFormField = {
 };
 
 interface CaboFormProps {
-  id: string;
+  id: number;
   index: number;
   fields: CaboFormField;
   setFields: (value: CaboFormField) => void;
-  removeCabo: (id: string) => void;
+  removeCabo: (id: number) => void;
 }
 
 export function CaboForm({ id, fields, setFields, removeCabo }: CaboFormProps) {
@@ -31,7 +31,7 @@ export function CaboForm({ id, fields, setFields, removeCabo }: CaboFormProps) {
     <Card className="rounded-xl shadow-md border border-gray-200">
       <CardHeader className="pb-3 border-b">
         <CardTitle className="text-lg font-semibold text-gray-700 flex items-center justify-between">
-          {id}
+          Cabo: {id.toString().padStart(2, '0')}
           <Button onClick={handleRemoveCabo} variant="destructive" className="cursor-pointer">
             Remover
           </Button>

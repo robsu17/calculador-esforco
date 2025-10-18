@@ -48,7 +48,7 @@ export default function App() {
   const [esforcoPoste, setEsforcoPoste] = useState<number>(300)
   const caboIdCounter = useRef(0)
 
-  const removeCabo = (id: string) => {
+  const removeCabo = (id: number) => {
     const cabosFiltered = caboForms.filter((value) => value.id !== id);
     setCaboForms(cabosFiltered)
   }
@@ -110,9 +110,15 @@ export default function App() {
     const esforcoResultante = Math.sqrt(esforcoResultanteX ** 2 + esforcoResultanteY ** 2);
     const anguloResultante = Math.atan2(esforcoResultanteY, esforcoResultanteX);
 
+    let angulo = radianosParaGraus(anguloResultante);
+
+    if (angulo < 0) {
+      angulo = 360 - Math.abs(angulo);
+    }
+
     setEsforcosCabo(esforcosTotais);
     setResultadoFinal({
-      anguloResultante: radianosParaGraus(anguloResultante),
+      anguloResultante: angulo,
       esforcoResultante,
       esforcoResultanteX,
       esforcoResultanteY
@@ -138,7 +144,7 @@ export default function App() {
                   className="cursor-pointer"
                   onClick={() => {
                     caboIdCounter.current += 1
-                    const newId = `cabo_${caboIdCounter.current}`
+                    const newId = caboIdCounter.current
                     setCaboForms(prev => [
                       ...prev,
                       {

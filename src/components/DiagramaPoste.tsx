@@ -37,9 +37,19 @@ export function DiagramaPoste({ caboForms, resultadoFinal, esforcosCabo, esforco
 
     const esforcoPosteConclusao = () => {
         if (esforcoPoste > resultadoFinal.esforcoResultante) {
-            return 'Conclusão: Esforço resultante é menor do que o esforço do poste, portanto o poste está adequado.'
+            return (
+                <div className='bg-green-500 p-3 rounded-md font-semibold text-white'>
+                    <h1>Conclusão</h1>
+                    <p className='font-normal'>Poste adequado, esforço resultante é menor do que a capacidade do poste.</p>
+                </div>
+            )
         } else {
-            return 'Conclusão: Esforço resultante é maior do que o esforço do poste, portanto o poste não está adequado.'
+            return (
+                <div className='bg-red-500 p-3 rounded-md font-semibold text-white'>
+                    <h1>Conclusão</h1>
+                    <p className='font-normal'>Poste inadequado, esforço resultante é maior do que a capacidade do poste.</p>
+                </div>
+            )
         }
     }
 
@@ -219,7 +229,7 @@ export function DiagramaPoste({ caboForms, resultadoFinal, esforcosCabo, esforco
                                         style={{ backgroundColor: cor }}
                                     />
                                     <span className="text-gray-600">
-                                        {caboForm.tipoDeCabo.split('-')[2]} ({caboForm.angulo}°) - {caboForm.vao}m
+                                        Cabo {caboForm.id} - {caboForm.tipoDeCabo.split('-')[2]} ({caboForm.angulo}°) - {caboForm.vao}m
                                     </span>
                                 </div>
                                 <span className="font-medium text-gray-800">
