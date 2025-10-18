@@ -3,6 +3,7 @@ import { Card, CardHeader, CardContent, CardTitle } from "../ui/card";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { Slider } from "../ui/slider";
 
 type FormType = {
     temperatura: number;
@@ -55,15 +56,16 @@ export function AmbienteForm({ setPressaoDinamicaRef, setAlturaPoste, setEsforco
             </CardHeader>
             <CardContent className="space-y-3">
                 <div className="grid grid-cols-2 gap-3">
-                    <div className="space-y-2">
-                        <Label htmlFor="temperatura">Temperatura coincidente (°C)</Label>
-                        <Input
-                            id="temperatura"
-                            type="number"
-                            defaultValue={field.temperatura}
-                            onChange={(e) => setFields(state => ({
+                    <div className="flex flex-col gap-6">
+                        <Label htmlFor="temperatura">Temperatura coincidente ({field.temperatura}°C)</Label>
+                        <Slider
+                            defaultValue={[field.temperatura]}
+                            min={-20}
+                            max={55}
+                            step={1}
+                            onValueChange={(e) => setFields(state => ({
                                 ...state,
-                                temperatura: Number(e.target.value)
+                                temperatura: e[0]
                             }))}
                         />
                     </div>
