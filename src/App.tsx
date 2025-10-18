@@ -116,69 +116,87 @@ export default function App() {
   }, [caboForms.length])
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-700 to-emerald-800 flex items-center justify-center">
-      <div className="max-w-6xl w-full mx-auto p-8">
-        <h1 className="text-4xl font-extrabold text-center text-white mb-10 tracking-tight">
-          Cálculo de Esforço em Postes
-        </h1>
+    <div className="min-h-screen bg-gradient-to-br from-emerald-700 to-emerald-800 flex flex-col">
+      <main className="flex-grow flex items-center justify-center">
+        <div className="max-w-6xl w-full mx-auto p-8">
+          <h1 className="text-4xl font-extrabold text-center text-white mb-10 tracking-tight">
+            Cálculo de Esforço em Postes
+          </h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Card className="bg-white rounded-2xl shadow-xl border border-gray-200">
-            <CardHeader className="pb-4 border-b">
-              <CardTitle className="text-lg font-semibold text-gray-700">Configuração do Ambiente</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <AmbienteForm
-                setAlturaPoste={setAlturaPoste}
-                setPressaoDinamicaRef={setPressaoDinamicaRef}
-                setEsforcoPoste={setEsforcoPoste}
-              />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Card className="bg-white rounded-2xl shadow-xl border border-gray-200">
+              <CardHeader className="pb-4 border-b">
+                <CardTitle className="text-lg font-semibold text-gray-700">Configuração do Ambiente</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <AmbienteForm
+                  setAlturaPoste={setAlturaPoste}
+                  setPressaoDinamicaRef={setPressaoDinamicaRef}
+                  setEsforcoPoste={setEsforcoPoste}
+                />
 
-              <div className="space-y-5">
-                {caboForms.map((caboForm, index) => (
-                  <div key={caboForm.id} className="p-4 rounded-xl border border-gray-200 shadow-sm bg-gray-50">
-                    <CaboForm
-                      id={caboForm.id}
-                      index={index}
-                      fields={caboForm}
-                      removeCabo={removeCabo}
-                      setFields={(newFields) => {
-                        const updated = [...caboForms]
-                        updated[index] = { ...updated[index], ...newFields }
-                        setCaboForms(updated)
-                      }}
-                    />
+                <div className="space-y-5">
+                  {caboForms.map((caboForm, index) => (
+                    <div key={caboForm.id} className="p-4 rounded-xl border border-gray-200 shadow-sm bg-gray-50">
+                      <CaboForm
+                        id={caboForm.id}
+                        index={index}
+                        fields={caboForm}
+                        removeCabo={removeCabo}
+                        setFields={(newFields) => {
+                          const updated = [...caboForms]
+                          updated[index] = { ...updated[index], ...newFields }
+                          setCaboForms(updated)
+                        }}
+                      />
+                    </div>
+                  ))}
+
+                  <div className="grid grid-cols-2 gap-2">
+                    <Button variant="outline" onClick={handleAddNewCabo}>
+                      ➕ Adicionar cabo
+                    </Button>
+                    <Button onClick={calculaTracaoInicial} className="bg-blue-600 hover:bg-blue-700 text-white">
+                      Calcular
+                    </Button>
                   </div>
-                ))}
-
-                <div className="grid grid-cols-2 gap-2">
-                  <Button variant="outline" onClick={handleAddNewCabo}>
-                    ➕ Adicionar cabo
-                  </Button>
-                  <Button onClick={calculaTracaoInicial} className="bg-blue-600 hover:bg-blue-700 text-white">
-                    Calcular
-                  </Button>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
 
-          <Card className="bg-white rounded-2xl shadow-xl border border-gray-200">
-            <CardHeader className="pb-4 border-b">
-              <CardTitle className="text-lg font-semibold text-gray-700">Resultado Final</CardTitle>
-            </CardHeader>
-            <CardContent className="pt-6 space-y-6">
-              <ResultadoFinalTable dados={resultadoFinal} />
-              <DiagramaPoste
-                caboForms={caboForms}
-                resultadoFinal={resultadoFinal}
-                esforcosCabo={esforcosCabo}
-                esforcoPoste={esforcoPoste}
-              />
-            </CardContent>
-          </Card>
+            <Card className="bg-white rounded-2xl shadow-xl border border-gray-200">
+              <CardHeader className="pb-4 border-b">
+                <CardTitle className="text-lg font-semibold text-gray-700">Resultado Final</CardTitle>
+              </CardHeader>
+              <CardContent className="pt-6 space-y-6">
+                <ResultadoFinalTable dados={resultadoFinal} />
+                <DiagramaPoste
+                  caboForms={caboForms}
+                  resultadoFinal={resultadoFinal}
+                  esforcosCabo={esforcosCabo}
+                  esforcoPoste={esforcoPoste}
+                />
+              </CardContent>
+            </Card>
+          </div>
         </div>
-      </div>
+      </main>
+
+      {/* 🌿 Footer */}
+      <footer className="bg-emerald-900 text-emerald-100 py-4 mt-8">
+        <div className="max-w-6xl mx-auto px-6 text-center text-sm">
+          <p className="opacity-90">
+            © {new Date().getFullYear()} Desenvolvido com 💡 e precisão por{" "}
+            <span className="font-semibold text-emerald-300">
+              <a href="https://www.linkedin.com/in/robson-lima-ba5bb31a8" target="_blank">Robson Wendel</a> e {' '}
+              <a href="https://www.linkedin.com/in/laiane-meneses" target="_blank">Laiane Meneses</a>
+            </span>.
+          </p>
+          <p className="text-xs mt-1 opacity-70">
+            Cálculo automatizado de esforços em postes
+          </p>
+        </div>
+      </footer>
     </div>
   )
 }
