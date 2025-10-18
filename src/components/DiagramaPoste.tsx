@@ -56,7 +56,7 @@ export function DiagramaPoste({ caboForms, resultadoFinal, esforcosCabo, esforco
     return (
         <div className="w-full bg-gray-50 rounded-lg border border-gray-200 p-2">
             <h3 className="text-sm font-semibold text-gray-700 mb-3 text-center">
-                📐 Diagrama de Forças
+                📐 Diagrama de Forças (Vista superior do poste)
             </h3>
 
             <div className="flex justify-center">

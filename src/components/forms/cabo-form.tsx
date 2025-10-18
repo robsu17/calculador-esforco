@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger } from "../ui/select";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { cabos } from "@/data/cabos";
@@ -7,10 +7,10 @@ import { Button } from "../ui/button";
 
 export type CaboFormField = {
   id: number;
-  vao: number;
-  angulo: number;
-  porcentagemDaFlecha: number;
-  tipoDeCabo: string;
+  vao: number | null;
+  angulo: number | null;
+  porcentagemDaFlecha: number | null;
+  tipoDeCabo: string | null;
 };
 
 interface CaboFormProps {
@@ -42,18 +42,21 @@ export function CaboForm({ id, fields, setFields, removeCabo }: CaboFormProps) {
           <div className="flex flex-col space-y-1">
             <Label>Tipo do cabo</Label>
             <Select
-              value={fields.tipoDeCabo}
               onValueChange={(value) =>
                 setFields({ ...fields, tipoDeCabo: value })
               }
             >
-              <SelectTrigger className="w-full min-w-[120px]">{fields.tipoDeCabo}</SelectTrigger>
+              <SelectTrigger className="w-full min-w-[120px]">
+                <SelectValue placeholder="Selecione o tipo do cabo" />
+              </SelectTrigger>
               <SelectContent>
-                {cabos.map((cabo, idx) => (
-                  <SelectItem key={idx} value={cabo.name}>
-                    {cabo.name}
-                  </SelectItem>
-                ))}
+                <SelectGroup>
+                  {cabos.map((cabo, idx) => (
+                    <SelectItem key={idx} value={cabo.name}>
+                      {cabo.name}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
               </SelectContent>
             </Select>
           </div>
@@ -63,7 +66,6 @@ export function CaboForm({ id, fields, setFields, removeCabo }: CaboFormProps) {
             <Label>Vão (m)</Label>
             <Input
               type="number"
-              value={fields.vao}
               onChange={(e) =>
                 setFields({ ...fields, vao: Number(e.target.value) })
               }
@@ -76,7 +78,6 @@ export function CaboForm({ id, fields, setFields, removeCabo }: CaboFormProps) {
             <Label>Ângulo (°)</Label>
             <Input
               type="number"
-              value={fields.angulo}
               onChange={(e) =>
                 setFields({ ...fields, angulo: Number(e.target.value) })
               }
@@ -90,7 +91,6 @@ export function CaboForm({ id, fields, setFields, removeCabo }: CaboFormProps) {
             <Input
               type="number"
               step="0.01"
-              value={fields.porcentagemDaFlecha}
               onChange={(e) =>
                 setFields({
                   ...fields,
