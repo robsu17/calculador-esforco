@@ -10,11 +10,14 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "dist": "electron-builder"
+    "generate": "electron-builder"
   },
   "build": {
     "appId": "com.robsu17.calc_esforco",
     "productName": "Calculador de Esforço",
+    "directories": {
+      "output": "release"
+    },
     "win": {
       "target": "nsis",
       "icon": "assets/agil.ico"

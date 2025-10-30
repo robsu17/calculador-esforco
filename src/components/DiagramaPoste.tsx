@@ -117,10 +117,10 @@ export function DiagramaPoste({ caboForms, resultadoFinal, esforcosCabo, esforco
 
                         if (!esforcoData) return null;
 
-                        const anguloRad = grausParaRadianos(caboForm.angulo);
+                        const anguloRad = grausParaRadianos(caboForm.angulo || 0);
 
                         // Calcular comprimento do cabo baseado no vão real
-                        const vaoMetros = caboForm.vao; // Vão em metros
+                        const vaoMetros = caboForm.vao || 0; // Vão em metros
                         const comprimentoCaboPixels = vaoMetros / escalaMetrosPorPixel;
 
                         // Calcular comprimento do vetor de força proporcional ao esforço
@@ -229,7 +229,7 @@ export function DiagramaPoste({ caboForms, resultadoFinal, esforcosCabo, esforco
                                         style={{ backgroundColor: cor }}
                                     />
                                     <span className="text-gray-600">
-                                        Cabo {caboForm.id} - {caboForm.tipoDeCabo.split('-')[2]} ({caboForm.angulo}°) - {caboForm.vao}m
+                                        Cabo {caboForm.id} - {caboForm.tipoDeCabo?.split('-')[2]} ({caboForm.angulo}°) - {caboForm.vao}m
                                     </span>
                                 </div>
                                 <span className="font-medium text-gray-800">

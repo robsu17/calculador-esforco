@@ -7,6 +7,7 @@ import { postes } from "./data/poste";
 import { Card, CardContent, CardHeader, CardTitle } from "./components/ui/card";
 import { ResultadoFinalTable } from "./components/ResultadoFinalTable";
 import { DiagramaPoste } from "./components/DiagramaPoste";
+import ToastProvider, { showToast } from "./components/ui/toast";
 
 type EsforcoCabo = Record<string, {
   esforcoTotal: number;
@@ -53,7 +54,7 @@ export default function App() {
         !ultimo?.vao
       )
     ) {
-      alert('Preencha os valores do último cabo adicionado antes de criar outro.')
+      showToast('Preencha os valores do último cabo adicionado antes de criar outro.')
       return
     }
 
@@ -69,13 +70,13 @@ export default function App() {
       !ultimo?.tipoDeCabo ||
       !ultimo?.vao
     ) {
-      alert(`Preencha os valores do cabo ${ultimo?.id ?? ''} para realizar o cálculo.`)
+      showToast(`Preencha os valores do cabo ${ultimo?.id ?? ''} para realizar o cálculo.`)
       return
     }
 
     const poste = postes.find(p => p.altura === alturaPoste)
     if (!poste) {
-      alert('Selecione uma altura de poste válida.')
+      showToast('Selecione uma altura de poste válida.')
       return
     }
 
@@ -116,7 +117,8 @@ export default function App() {
   }, [caboForms.length])
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-700 to-emerald-800 flex flex-col">
+    <ToastProvider>
+      <div className="min-h-screen bg-gradient-to-br from-emerald-700 to-emerald-800 flex flex-col">
       <main className="flex-grow flex items-center justify-center">
         <div className="max-w-6xl w-full mx-auto p-8">
           <h1 className="text-4xl font-extrabold text-center text-white mb-10 tracking-tight">
@@ -182,7 +184,6 @@ export default function App() {
         </div>
       </main>
 
-      {/* 🌿 Footer */}
       <footer className="bg-emerald-900 text-emerald-100 py-4 mt-8">
         <div className="max-w-6xl mx-auto px-6 text-center text-sm">
           <p className="opacity-90">
@@ -197,6 +198,7 @@ export default function App() {
           </p>
         </div>
       </footer>
-    </div>
+      </div>
+    </ToastProvider>
   )
 }
