@@ -27,6 +27,16 @@ export function CaboForm({ id, fields, setFields, removeCabo }: CaboFormProps) {
     removeCabo(id)
   }
 
+  function gerarValores() {
+    const valores = [];
+    
+    for (let i = 0; i <= 50; i++) {
+      valores.push(i/10);
+    }
+    
+    return valores;
+  }
+
   return (
     <Card className="rounded-xl shadow-md border border-gray-200">
       <CardHeader className="pb-3 border-b">
@@ -78,27 +88,38 @@ export function CaboForm({ id, fields, setFields, removeCabo }: CaboFormProps) {
             <Label>Ângulo (°)</Label>
             <Input
               type="number"
-              onChange={(e) =>
-                setFields({ ...fields, angulo: Number(e.target.value) })
-              }
+              value={fields.angulo ?? ''}
+              onChange={(e) => {
+                if (Number(e.target.value) >= 0 && Number(e.target.value) <= 360) {
+                  setFields({ ...fields, angulo: parseFloat(e.target.value) })
+                }
+              }}
               className="w-full min-w-[80px]"
+              placeholder="Entre 0° e 360°"
             />
           </div>
 
-          {/* Porcentagem da Flecha */}
           <div className="flex flex-col space-y-1">
             <Label>Porcentagem da Flecha</Label>
-            <Input
-              type="number"
-              step="0.01"
-              onChange={(e) =>
-                setFields({
-                  ...fields,
-                  porcentagemDaFlecha: parseFloat(e.target.value),
-                })
-              }
-              className="w-full min-w-[80px]"
-            />
+            <Select
+              onValueChange={(e) => setFields({ ...fields, porcentagemDaFlecha: parseFloat(e)/100 })}
+            >
+              <SelectTrigger className="w-full min-w-[120px]">
+                <SelectValue placeholder="Selecione a porcentagem" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  {gerarValores().map((valor) => (
+                    <SelectItem
+                      key={valor}
+                      value={valor.toString()}
+                    >
+                      {valor}%
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
           </div>
         </div>
       </CardContent>

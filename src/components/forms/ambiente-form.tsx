@@ -4,6 +4,7 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { Slider } from "../ui/slider";
+import { postes } from "@/data/poste";
 
 type FormType = {
     temperatura: number;
@@ -108,11 +109,13 @@ export function AmbienteForm({ setPressaoDinamicaRef, setAlturaPoste, setEsforco
                                 <SelectValue placeholder="Selecione a altura do poste" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="8">8</SelectItem>
-                                <SelectItem value="9">9</SelectItem>
-                                <SelectItem value="10">10</SelectItem>
-                                <SelectItem value="11">11</SelectItem>
-                                <SelectItem value="12">12</SelectItem>
+                                {
+                                    postes.map((poste) => (
+                                        <SelectItem key={poste.altura} value={poste.altura.toString()}>
+                                            {poste.altura}
+                                        </SelectItem>
+                                    ))
+                                }
                             </SelectContent>
                         </Select>
                     </div>
@@ -132,6 +135,7 @@ export function AmbienteForm({ setPressaoDinamicaRef, setAlturaPoste, setEsforco
                             <SelectValue placeholder="Selecione o esforço do poste" />
                         </SelectTrigger>
                         <SelectContent>
+                            <SelectItem value="100">100</SelectItem>
                             <SelectItem value="150">150</SelectItem>
                             <SelectItem value="200">200</SelectItem>
                             <SelectItem value="300">300</SelectItem>
