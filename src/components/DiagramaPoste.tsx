@@ -1,5 +1,6 @@
-import { CaboFormField } from './forms/cabo-form';
+import poste from "@/assets/poste.png";
 import { ResultadoFinal } from '../App';
+import { CaboFormField } from './forms/cabo-form';
 
 interface DiagramaPosteProps {
     caboForms: CaboFormField[];
@@ -80,34 +81,12 @@ export function DiagramaPoste({ caboForms, resultadoFinal, esforcosCabo, esforco
                             stroke="#1a202c"
                             strokeWidth="1"
                         />
-
-                        {/* Cruz de referência do poste */}
-                        <line
-                            x1={centerX - 8}
-                            y1={centerY}
-                            x2={centerX + 8}
-                            y2={centerY}
-                            stroke="#4a5568"
-                            strokeWidth="2"
+                        <image
+                            href={poste}
+                            x={centerX - 25}
+                            y={centerY - 19}
+                            width={50}
                         />
-                        <line
-                            x1={centerX}
-                            y1={centerY - 8}
-                            x2={centerX}
-                            y2={centerY + 8}
-                            stroke="#4a5568"
-                            strokeWidth="2"
-                        />
-
-                        {/* Texto "POSTE" */}
-                        <text
-                            x={centerX}
-                            y={centerY + 4}
-                            textAnchor="middle"
-                            className="text-sm font-bold fill-white"
-                        >
-                            {/* POSTE */}
-                        </text>
                     </g>
 
                     {/* Desenhar cabos e suas forças */}
@@ -187,7 +166,7 @@ export function DiagramaPoste({ caboForms, resultadoFinal, esforcosCabo, esforco
                         x2={centerX + 150}
                         y2={centerY}
                         stroke="#6b7280"
-                        strokeWidth="3"
+                        strokeWidth="2"
                         strokeDasharray="2,2"
                     />
                     <line
@@ -196,7 +175,7 @@ export function DiagramaPoste({ caboForms, resultadoFinal, esforcosCabo, esforco
                         x2={centerX}
                         y2={centerY + 150}
                         stroke="#6b7280"
-                        strokeWidth="3"
+                        strokeWidth="2"
                         strokeDasharray="2,2"
                     />
 
