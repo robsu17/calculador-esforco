@@ -1,4 +1,5 @@
 import poste from "@/assets/poste.png";
+import { cargaUtilizacao } from "@/data/carga-utilizacao";
 import { ResultadoFinal } from '../App';
 import { CaboFormField } from './forms/cabo-form';
 
@@ -37,17 +38,18 @@ export function DiagramaPoste({ caboForms, resultadoFinal, esforcosCabo, esforco
     const coresCabo = ['#dc2626', '#2563eb', '#059669', '#d97706', '#7c3aed', '#db2777'];
 
     const esforcoPosteConclusao = () => {
-        if (esforcoPoste > resultadoFinal.esforcoResultante) {
+        const cargaUtilizacaoPoste = cargaUtilizacao(resultadoFinal.anguloResultante, esforcoPoste);
+        if (cargaUtilizacaoPoste > resultadoFinal.esforcoResultante) {
             return (
                 <div className='bg-green-500 p-3 rounded-md font-semibold text-white'>
-                    <h1>Conclusão</h1>
+                    <h1>Capacidade do poste: {cargaUtilizacaoPoste.toFixed(1)} (daN)</h1>
                     <p className='font-normal'>Poste adequado, esforço resultante é menor do que a capacidade do poste.</p>
                 </div>
             )
         } else {
             return (
                 <div className='bg-red-500 p-3 rounded-md font-semibold text-white'>
-                    <h1>Conclusão</h1>
+                    <h1>Capacidade do poste: {cargaUtilizacaoPoste.toFixed(2)}</h1>
                     <p className='font-normal'>Poste inadequado, esforço resultante é maior do que a capacidade do poste.</p>
                 </div>
             )
