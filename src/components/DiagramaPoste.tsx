@@ -83,9 +83,10 @@ export function DiagramaPoste({ caboForms, resultadoFinal, esforcosCabo, esforco
                         />
                         <image
                             href={poste}
-                            x={centerX - 25}
-                            y={centerY - 19}
-                            width={50}
+                            x={centerX - 37.5}
+                            y={centerY - 37.5}
+                            width={75}
+                            height={75}
                         />
                     </g>
 
