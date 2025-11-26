@@ -64,27 +64,27 @@ export const cabosBT: CaboBT[] = [
 
 export const cabosMT: CaboMT[] = [
     {
-        bitola: "4",
+        bitola: "4AWG CAA ou 4AWG CAA/AW",
         diametro: 0.00636,
         massa: 0.0855
     },
     {
-        bitola: "1/0",
+        bitola: "1/0AWG CAA ou 1/0AWG CAA/AW",
         diametro: 0.01011,
         massa: 0.2161
     },
     {
-        bitola: "2/0",
+        bitola: "2/0AWG CAA",
         diametro: 0.01134,
         massa: 0.2718
     },
     {
-        bitola: "266,8",
+        bitola: "266,8MCM CAA ou 266,8MCM CAA/AW",
         diametro: 0.01628,
         massa: 0.5445
     },
     {
-        bitola: "336,4",
+        bitola: "336,4MCM CAA",
         diametro: 0.01831,
         massa: 0.6887
     }

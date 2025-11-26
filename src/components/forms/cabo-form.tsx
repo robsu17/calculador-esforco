@@ -1,4 +1,4 @@
-import { cabosBT, cabosFibra } from "@/data/cabos";
+import { cabosBT, cabosFibra, cabosMT } from "@/data/cabos";
 import { getFlecha } from "@/data/tabela-flechas";
 import { useEffect } from "react";
 import { Button } from "../ui/button";
@@ -41,23 +41,45 @@ export function CaboForm({ id, fields, setFields, removeCabo, temperatura }: Cab
     return valores;
   }
 
-  const calculaFlechaBT = () => {
-    if (fields.tipoDeCaboSelecionado === 'bt' && temperatura !== undefined && fields.vao) {
-      const flechaCm = getFlecha(temperatura, fields.vao);
+  const calculaFlecha = () => {
+    if (temperatura === undefined || !fields.vao || !fields.tipoDeCaboSelecionado) return;
 
-      if (flechaCm !== null) {
-        const flechaM = flechaCm / 100;
+    let flechaCm: number | null = null;
 
-        if (fields.flecha !== flechaM) {
-          setFields({ ...fields, flecha: flechaM, porcentagemDaFlecha: null });
-        }
+    if (fields.tipoDeCaboSelecionado === 'bt') {
+      flechaCm = getFlecha(temperatura, fields.vao, 'bt');
+    } else if (fields.tipoDeCaboSelecionado === 'mt' && fields.tipoDeCabo) {
+      flechaCm = getFlecha(temperatura, fields.vao, 'mt', fields.tipoDeCabo);
+    }
+
+    if (flechaCm !== null) {
+      const flechaM = flechaCm / 100;
+
+      if (fields.flecha !== flechaM) {
+        setFields({ ...fields, flecha: flechaM, porcentagemDaFlecha: null });
       }
     }
   }
 
   useEffect(() => {
-    calculaFlechaBT();
-  }, [temperatura, fields.vao, fields.tipoDeCaboSelecionado]);
+    calculaFlecha();
+  }, [temperatura, fields.vao, fields.tipoDeCaboSelecionado, fields.tipoDeCabo]);
+
+  const isFlechaCalculated = () => {
+    if (fields.tipoDeCaboSelecionado === 'bt') return true;
+    if (fields.tipoDeCaboSelecionado === 'mt' && fields.tipoDeCabo) {
+      // Se o cálculo retornar um valor (significando que existe tabela), então é calculado.
+      // Como getFlecha é síncrono e rápido, podemos verificar se ele retorna valor.
+      // Mas precisamos dos inputs.
+      if (temperatura !== undefined && fields.vao) {
+        return getFlecha(temperatura, fields.vao, 'mt', fields.tipoDeCabo) !== null;
+      }
+      // Se não tivermos inputs completos, podemos verificar apenas se o cabo tem tabela conhecida.
+      // Por enquanto, sabemos que apenas o '4' tem.
+      return fields.tipoDeCabo === '4';
+    }
+    return false;
+  }
 
   return (
     <Card className="rounded-xl shadow-md border border-gray-200">
@@ -137,6 +159,30 @@ export function CaboForm({ id, fields, setFields, removeCabo, temperatura }: Cab
             </div>
           )}
 
+          {fields.tipoDeCaboSelecionado === 'mt' && (
+            <div className="flex flex-col space-y-1">
+              <Label>Tipo do cabo</Label>
+              <Select
+                onValueChange={(value) =>
+                  setFields({ ...fields, tipoDeCabo: value })
+                }
+              >
+                <SelectTrigger className="w-full min-w-[120px]">
+                  <SelectValue placeholder="Selecione o tipo do cabo" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {cabosMT.map((cabo, idx) => (
+                      <SelectItem key={idx} value={cabo.bitola}>
+                        {cabo.bitola}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+
           {/* Vão */}
           <div className="flex flex-col space-y-1">
             <Label>Vão (m)</Label>
@@ -194,7 +240,7 @@ export function CaboForm({ id, fields, setFields, removeCabo, temperatura }: Cab
               <Input
                 type="number"
                 placeholder="Flecha em metros"
-                disabled={fields.tipoDeCaboSelecionado === 'bt'}
+                disabled={isFlechaCalculated()}
                 value={fields.flecha ?? ''}
                 onChange={(e) => setFields({ ...fields, flecha: parseFloat(e.target.value), porcentagemDaFlecha: null })}
               />
