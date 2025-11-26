@@ -1,9 +1,10 @@
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
-import { cabos } from "@/data/cabos";
+import { cabosBT, cabosFibra } from "@/data/cabos";
 import { Button } from "../ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
 export type CaboFormField = {
   id: number;
@@ -11,6 +12,7 @@ export type CaboFormField = {
   angulo: number | null;
   porcentagemDaFlecha: number | null;
   tipoDeCabo: string | null;
+  tipoDeCaboSelecionado: string | null;
 };
 
 interface CaboFormProps {
@@ -29,11 +31,11 @@ export function CaboForm({ id, fields, setFields, removeCabo }: CaboFormProps) {
 
   function gerarValores() {
     const valores = [];
-    
+
     for (let i = 0; i <= 50; i++) {
-      valores.push(i/10);
+      valores.push(i / 10);
     }
-    
+
     return valores;
   }
 
@@ -47,29 +49,73 @@ export function CaboForm({ id, fields, setFields, removeCabo }: CaboFormProps) {
           </Button>
         </CardTitle>
       </CardHeader>
-      <CardContent className="pt-4">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-          <div className="flex flex-col space-y-1">
-            <Label>Tipo do cabo</Label>
-            <Select
-              onValueChange={(value) =>
-                setFields({ ...fields, tipoDeCabo: value })
-              }
-            >
-              <SelectTrigger className="w-full min-w-[120px]">
-                <SelectValue placeholder="Selecione o tipo do cabo" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  {cabos.map((cabo, idx) => (
-                    <SelectItem key={idx} value={cabo.name}>
-                      {cabo.name}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+      <CardContent className="pt-4 space-y-6">
+        <RadioGroup
+          defaultValue="fibra"
+          className="flex items-center space-x-2"
+          onValueChange={(value) => setFields({ ...fields, tipoDeCaboSelecionado: value })}
+        >
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="fibra" id="fibra" />
+            <Label htmlFor="fibra">Fibra Óptica</Label>
           </div>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="bt" id="bt" />
+            <Label htmlFor="bt">BT</Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="mt" id="mt" />
+            <Label htmlFor="mt">MT</Label>
+          </div>
+        </RadioGroup>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+          {fields.tipoDeCaboSelecionado === 'fibra' && (
+            <div className="flex flex-col space-y-1">
+              <Label>Tipo do cabo</Label>
+              <Select
+                onValueChange={(value) =>
+                  setFields({ ...fields, tipoDeCabo: value })
+                }
+              >
+                <SelectTrigger className="w-full min-w-[120px]">
+                  <SelectValue placeholder="Selecione o tipo do cabo" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {cabosFibra.map((cabo, idx) => (
+                      <SelectItem key={idx} value={cabo.name}>
+                        {cabo.name}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+
+          {fields.tipoDeCaboSelecionado === 'bt' && (
+            <div className="flex flex-col space-y-1">
+              <Label>Tipo do cabo</Label>
+              <Select
+                onValueChange={(value) =>
+                  setFields({ ...fields, tipoDeCabo: value })
+                }
+              >
+                <SelectTrigger className="w-full min-w-[120px]">
+                  <SelectValue placeholder="Selecione o tipo do cabo" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {cabosBT.map((cabo, idx) => (
+                      <SelectItem key={idx} value={cabo.condutor}>
+                        {cabo.condutor}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+          )}
 
           {/* Vão */}
           <div className="flex flex-col space-y-1">
@@ -99,28 +145,35 @@ export function CaboForm({ id, fields, setFields, removeCabo }: CaboFormProps) {
             />
           </div>
 
-          <div className="flex flex-col space-y-1">
-            <Label>Porcentagem da Flecha</Label>
-            <Select
-              onValueChange={(e) => setFields({ ...fields, porcentagemDaFlecha: parseFloat(e)/100 })}
-            >
-              <SelectTrigger className="w-full min-w-[120px]">
-                <SelectValue placeholder="Selecione a porcentagem" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  {gerarValores().map((valor) => (
-                    <SelectItem
-                      key={valor}
-                      value={valor.toString()}
-                    >
-                      {valor}%
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
+          {fields.tipoDeCaboSelecionado === 'fibra' ? (
+            <div className="flex flex-col space-y-1">
+              <Label>Porcentagem da Flecha</Label>
+              <Select
+                onValueChange={(e) => setFields({ ...fields, porcentagemDaFlecha: parseFloat(e) / 100 })}
+              >
+                <SelectTrigger className="w-full min-w-[120px]">
+                  <SelectValue placeholder="Selecione a porcentagem" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {gerarValores().map((valor) => (
+                      <SelectItem
+                        key={valor}
+                        value={valor.toString()}
+                      >
+                        {valor}%
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+          ) : (
+            <div className="flex flex-col space-y-1">
+              <Label>Porcentagem da Flecha</Label>
+              <Input placeholder="Flecha" disabled />
+            </div>
+          )}
         </div>
       </CardContent>
     </Card>

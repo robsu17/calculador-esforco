@@ -6,7 +6,7 @@ import { ResultadoFinalTable } from "./components/ResultadoFinalTable";
 import { Button } from "./components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "./components/ui/card";
 import ToastProvider, { showToast } from "./components/ui/toast";
-import { cabos } from "./data/cabos";
+import { cabosFibra } from "./data/cabos";
 import { postes } from "./data/poste";
 
 type EsforcoCabo = Record<string, {
@@ -51,7 +51,8 @@ export default function App() {
         !ultimo?.angulo ||
         !ultimo?.porcentagemDaFlecha ||
         !ultimo?.tipoDeCabo ||
-        !ultimo?.vao
+        !ultimo?.vao ||
+        !ultimo?.tipoDeCaboSelecionado
       )
     ) {
       showToast('Preencha os valores do último cabo adicionado antes de criar outro.')
@@ -59,7 +60,7 @@ export default function App() {
     }
 
     caboIdCounter.current += 1
-    setCaboForms(prev => [...prev, { id: caboIdCounter.current, angulo: null, porcentagemDaFlecha: null, tipoDeCabo: null, vao: null }])
+    setCaboForms(prev => [...prev, { id: caboIdCounter.current, angulo: null, porcentagemDaFlecha: null, tipoDeCabo: null, vao: null, tipoDeCaboSelecionado: "fibra" }])
   }
 
   const calculaTracaoInicial = () => {
@@ -68,7 +69,8 @@ export default function App() {
       !ultimo?.angulo ||
       !ultimo?.porcentagemDaFlecha ||
       !ultimo?.tipoDeCabo ||
-      !ultimo?.vao
+      !ultimo?.vao ||
+      !ultimo?.tipoDeCaboSelecionado
     ) {
       showToast(`Preencha os valores do cabo ${ultimo?.id ?? ''} para realizar o cálculo.`)
       return
@@ -84,7 +86,7 @@ export default function App() {
 
     caboForms.forEach((caboForm, index) => {
       if (!caboForm.vao || !caboForm.porcentagemDaFlecha) return
-      const cabo = cabos.find(c => c.name === caboForm.tipoDeCabo) || cabos[0]
+      const cabo = cabosFibra.find(c => c.name === caboForm.tipoDeCabo) || cabosFibra[0]
 
       const denominador = 8 * (caboForm.porcentagemDaFlecha * caboForm.vao)
       if (denominador === 0) return
