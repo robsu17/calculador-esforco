@@ -28,6 +28,7 @@ export default function App() {
   const [pressaoDinamicaRef, setPressaoDinamicaRef] = useState(0)
   const [alturaPoste, setAlturaPoste] = useState<number>()
   const [caboForms, setCaboForms] = useState<CaboFormField[]>([])
+  const [temperatura, setTemperatura] = useState<number>();
   const [resultadoFinal, setResultadoFinal] = useState<ResultadoFinal>({
     anguloResultante: 0,
     esforcoResultante: 0,
@@ -49,7 +50,7 @@ export default function App() {
       caboForms.length > 0 &&
       (
         !ultimo?.angulo ||
-        !ultimo?.porcentagemDaFlecha ||
+        (!ultimo?.porcentagemDaFlecha && !ultimo?.flecha) ||
         !ultimo?.tipoDeCabo ||
         !ultimo?.vao ||
         !ultimo?.tipoDeCaboSelecionado
@@ -60,14 +61,14 @@ export default function App() {
     }
 
     caboIdCounter.current += 1
-    setCaboForms(prev => [...prev, { id: caboIdCounter.current, angulo: null, porcentagemDaFlecha: null, tipoDeCabo: null, vao: null, tipoDeCaboSelecionado: "fibra" }])
+    setCaboForms(prev => [...prev, { id: caboIdCounter.current, angulo: null, porcentagemDaFlecha: null, flecha: null, tipoDeCabo: null, vao: null, tipoDeCaboSelecionado: "fibra" }])
   }
 
   const calculaTracaoInicial = () => {
     const ultimo = caboForms[caboForms.length - 1]
     if (
       !ultimo?.angulo ||
-      !ultimo?.porcentagemDaFlecha ||
+      (!ultimo?.porcentagemDaFlecha && !ultimo?.flecha) ||
       !ultimo?.tipoDeCabo ||
       !ultimo?.vao ||
       !ultimo?.tipoDeCaboSelecionado
@@ -85,10 +86,17 @@ export default function App() {
     const esforcosTotais: EsforcoCabo = {}
 
     caboForms.forEach((caboForm, index) => {
-      if (!caboForm.vao || !caboForm.porcentagemDaFlecha) return
+      if (!caboForm.vao || (!caboForm.porcentagemDaFlecha && !caboForm.flecha)) return
       const cabo = cabosFibra.find(c => c.name === caboForm.tipoDeCabo) || cabosFibra[0]
 
-      const denominador = 8 * (caboForm.porcentagemDaFlecha * caboForm.vao)
+      let sag = 0;
+      if (caboForm.flecha) {
+        sag = caboForm.flecha;
+      } else if (caboForm.porcentagemDaFlecha) {
+        sag = caboForm.porcentagemDaFlecha * caboForm.vao;
+      }
+
+      const denominador = 8 * sag
       if (denominador === 0) return
 
       const tracaoInicial = (cabo.weight * (caboForm.vao ** 2)) / denominador
@@ -114,6 +122,10 @@ export default function App() {
     setResultadoFinal({ anguloResultante, esforcoResultante, esforcoResultanteX, esforcoResultanteY })
   }
 
+  const onSetTemperatura = (value: number) => {
+    setTemperatura(value)
+  }
+
   useEffect(() => {
     if (caboForms.length === 0) caboIdCounter.current = 0
   }, [caboForms.length])
@@ -137,6 +149,7 @@ export default function App() {
                     setAlturaPoste={setAlturaPoste}
                     setPressaoDinamicaRef={setPressaoDinamicaRef}
                     setEsforcoPoste={setEsforcoPoste}
+                    setTemperatura={onSetTemperatura}
                   />
 
                   <div className="space-y-5">
@@ -152,6 +165,7 @@ export default function App() {
                             updated[index] = { ...updated[index], ...newFields }
                             setCaboForms(updated)
                           }}
+                          temperatura={temperatura}
                         />
                       </div>
                     ))}

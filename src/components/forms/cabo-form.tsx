@@ -1,4 +1,6 @@
 import { cabosBT, cabosFibra } from "@/data/cabos";
+import { getFlecha } from "@/data/tabela-flechas";
+import { useEffect } from "react";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Input } from "../ui/input";
@@ -11,6 +13,7 @@ export type CaboFormField = {
   vao: number | null;
   angulo: number | null;
   porcentagemDaFlecha: number | null;
+  flecha: number | null;
   tipoDeCabo: string | null;
   tipoDeCaboSelecionado: string | null;
 };
@@ -21,9 +24,10 @@ interface CaboFormProps {
   fields: CaboFormField;
   setFields: (value: CaboFormField) => void;
   removeCabo: (id: number) => void;
+  temperatura?: number;
 }
 
-export function CaboForm({ id, fields, setFields, removeCabo }: CaboFormProps) {
+export function CaboForm({ id, fields, setFields, removeCabo, temperatura }: CaboFormProps) {
 
   const handleRemoveCabo = () => {
     removeCabo(id)
@@ -31,13 +35,29 @@ export function CaboForm({ id, fields, setFields, removeCabo }: CaboFormProps) {
 
   function gerarValores() {
     const valores = [];
-
     for (let i = 0; i <= 50; i++) {
       valores.push(i / 10);
     }
-
     return valores;
   }
+
+  const calculaFlechaBT = () => {
+    if (fields.tipoDeCaboSelecionado === 'bt' && temperatura !== undefined && fields.vao) {
+      const flechaCm = getFlecha(temperatura, fields.vao);
+
+      if (flechaCm !== null) {
+        const flechaM = flechaCm / 100;
+
+        if (fields.flecha !== flechaM) {
+          setFields({ ...fields, flecha: flechaM, porcentagemDaFlecha: null });
+        }
+      }
+    }
+  }
+
+  useEffect(() => {
+    calculaFlechaBT();
+  }, [temperatura, fields.vao, fields.tipoDeCaboSelecionado]);
 
   return (
     <Card className="rounded-xl shadow-md border border-gray-200">
@@ -53,7 +73,7 @@ export function CaboForm({ id, fields, setFields, removeCabo }: CaboFormProps) {
         <RadioGroup
           defaultValue="fibra"
           className="flex items-center space-x-2"
-          onValueChange={(value) => setFields({ ...fields, tipoDeCaboSelecionado: value })}
+          onValueChange={(value) => setFields({ ...fields, tipoDeCaboSelecionado: value, flecha: null, porcentagemDaFlecha: null })}
         >
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="fibra" id="fibra" />
@@ -149,7 +169,7 @@ export function CaboForm({ id, fields, setFields, removeCabo }: CaboFormProps) {
             <div className="flex flex-col space-y-1">
               <Label>Porcentagem da Flecha</Label>
               <Select
-                onValueChange={(e) => setFields({ ...fields, porcentagemDaFlecha: parseFloat(e) / 100 })}
+                onValueChange={(e) => setFields({ ...fields, porcentagemDaFlecha: parseFloat(e) / 100, flecha: null })}
               >
                 <SelectTrigger className="w-full min-w-[120px]">
                   <SelectValue placeholder="Selecione a porcentagem" />
@@ -170,8 +190,14 @@ export function CaboForm({ id, fields, setFields, removeCabo }: CaboFormProps) {
             </div>
           ) : (
             <div className="flex flex-col space-y-1">
-              <Label>Porcentagem da Flecha</Label>
-              <Input placeholder="Flecha" disabled />
+              <Label>Flecha (m)</Label>
+              <Input
+                type="number"
+                placeholder="Flecha em metros"
+                disabled={fields.tipoDeCaboSelecionado === 'bt'}
+                value={fields.flecha ?? ''}
+                onChange={(e) => setFields({ ...fields, flecha: parseFloat(e.target.value), porcentagemDaFlecha: null })}
+              />
             </div>
           )}
         </div>
