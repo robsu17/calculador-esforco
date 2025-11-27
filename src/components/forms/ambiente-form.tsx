@@ -1,10 +1,10 @@
+import { postes } from "@/data/poste";
 import { useEffect, useState } from "react";
-import { Card, CardHeader, CardContent, CardTitle } from "../ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { Slider } from "../ui/slider";
-import { postes } from "@/data/poste";
 
 type FormType = {
     temperatura: number;
@@ -16,11 +16,12 @@ type FormType = {
 
 interface AmbienteProps {
     setPressaoDinamicaRef: (value: number) => void;
+    setTemperatura: (value: number) => void;
     setAlturaPoste: (value: number) => void;
     setEsforcoPoste: (value: number) => void;
 }
 
-export function AmbienteForm({ setPressaoDinamicaRef, setAlturaPoste, setEsforcoPoste }: AmbienteProps) {
+export function AmbienteForm({ setPressaoDinamicaRef, setTemperatura, setAlturaPoste, setEsforcoPoste }: AmbienteProps) {
     const [field, setFields] = useState<FormType>({
         altitudeMedia: 70,
         temperatura: 15,
@@ -28,6 +29,10 @@ export function AmbienteForm({ setPressaoDinamicaRef, setAlturaPoste, setEsforco
         alturaPoste: 9,
         esforcoPoste: 300
     });
+
+    useEffect(() => {
+        setTemperatura(field.temperatura)
+    }, [field.temperatura])
 
 
     const calculaPressaoDinamicaRef = () => {
