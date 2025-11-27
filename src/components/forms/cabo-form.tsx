@@ -1,5 +1,5 @@
 import { cabosBT, cabosFibra, cabosMT } from "@/data/cabos";
-import { getFlecha } from "@/data/tabela-flechas";
+import { getFlecha, tabelas } from "@/data/tabela-flechas";
 import { useEffect } from "react";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
@@ -68,15 +68,7 @@ export function CaboForm({ id, fields, setFields, removeCabo, temperatura }: Cab
   const isFlechaCalculated = () => {
     if (fields.tipoDeCaboSelecionado === 'bt') return true;
     if (fields.tipoDeCaboSelecionado === 'mt' && fields.tipoDeCabo) {
-      // Se o cálculo retornar um valor (significando que existe tabela), então é calculado.
-      // Como getFlecha é síncrono e rápido, podemos verificar se ele retorna valor.
-      // Mas precisamos dos inputs.
-      if (temperatura !== undefined && fields.vao) {
-        return getFlecha(temperatura, fields.vao, 'mt', fields.tipoDeCabo) !== null;
-      }
-      // Se não tivermos inputs completos, podemos verificar apenas se o cabo tem tabela conhecida.
-      // Por enquanto, sabemos que apenas o '4' tem.
-      return fields.tipoDeCabo === '4';
+      return !!tabelas.mt[fields.tipoDeCabo];
     }
     return false;
   }

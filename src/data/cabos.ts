@@ -79,7 +79,7 @@ export const cabosMT: CaboMT[] = [
         massa: 0.2718
     },
     {
-        bitola: "266,8MCM CAA ou 266,8MCM CAA/AW",
+        bitola: "266,8MCM CAA ou 266,8MCM CAA/AW",
         diametro: 0.01628,
         massa: 0.5445
     },
