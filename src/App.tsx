@@ -6,7 +6,7 @@ import { ResultadoFinalTable } from "./components/ResultadoFinalTable";
 import { Button } from "./components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "./components/ui/card";
 import ToastProvider, { showToast } from "./components/ui/toast";
-import { cabosFibra } from "./data/cabos";
+import { cabosBT, cabosFibra, cabosMT } from "./data/cabos";
 import { postes } from "./data/poste";
 
 type EsforcoCabo = Record<string, {
@@ -87,7 +87,23 @@ export default function App() {
 
     caboForms.forEach((caboForm, index) => {
       if (!caboForm.vao || (!caboForm.porcentagemDaFlecha && !caboForm.flecha)) return
-      const cabo = cabosFibra.find(c => c.name === caboForm.tipoDeCabo) || cabosFibra[0]
+      let cabo;
+
+      switch (caboForm.tipoDeCaboSelecionado) {
+        case "fibra":
+          cabo = cabosFibra.find(c => c.name === caboForm.tipoDeCabo)
+          break;
+        case "bt":
+          cabo = cabosBT.find(c => c.name === caboForm.tipoDeCabo)
+          break;
+        case "mt":
+          cabo = cabosMT.find(c => c.name === caboForm.tipoDeCabo)
+          break;
+        default:
+          return;
+      }
+
+      if (!cabo) return;
 
       let sag = 0;
       if (caboForm.flecha) {
@@ -99,12 +115,62 @@ export default function App() {
       const denominador = 8 * sag
       if (denominador === 0) return
 
-      const tracaoInicial = (cabo.weight * (caboForm.vao ** 2)) / denominador
+      let tracaoInicial = (cabo.weight * (caboForm.vao ** 2)) / denominador
       const cargaDoVento = pressaoDinamicaRef * cabo.diameter * (caboForm.vao / 2)
-      const esforcoTotal = tracaoInicial + cargaDoVento
-      const esforcoRefletido = esforcoTotal * poste.fatorMultiplicacao
+
+      if (caboForm.tipoDeCaboSelecionado === "mt" && caboForm.vao < 45) {
+        tracaoInicial = tracaoInicial * 3;
+      }
+
+      let esforcoTotal = tracaoInicial + cargaDoVento
+      let esforcoRefletido = esforcoTotal * 1;
+      if (caboForm.tipoDeCaboSelecionado === "fibra") {
+        esforcoRefletido = esforcoTotal * poste.fatorMultiplicacao
+      }
       const esforcoRefletidoX = Math.cos(grausParaRadianos(caboForm.angulo || 1)) * esforcoRefletido
       const esforcoRefletidoY = Math.sin(grausParaRadianos(caboForm.angulo || 1)) * esforcoRefletido
+
+      if (
+        (caboForm.tipoDeCaboSelecionado === "bt" ||
+          caboForm.tipoDeCaboSelecionado === "mt") && caboForm.vao > 45
+      ) {
+        if (caboForm.tipoDeCaboSelecionado === "bt") {
+          switch (cabo.name) {
+            case "3x35+1x54,6":
+              esforcoTotal = 243;
+              break;
+            case "3x50+1x54,6":
+              esforcoTotal = 265;
+              break;
+            case "3x95+1x54,6":
+              esforcoTotal = 393;
+              break;
+            case "3x150+1x80":
+              esforcoTotal = 554;
+              break;
+          }
+        }
+
+        if (caboForm.tipoDeCaboSelecionado === "mt") {
+          switch (cabo.name) {
+            case "4AWG CAA ou 4AWG CAA/AW":
+              esforcoTotal = 285;
+              break;
+            case "1/0AWG CAA ou 1/0AWG CAA/AW":
+              esforcoTotal = 618;
+              break;
+            case "2/0AWG CAA":
+              esforcoTotal = 771;
+              break;
+            case "266,8MCM CAA ou 266,8MCM CAA/AW":
+              esforcoTotal = 1539;
+              break;
+            case "336,4MCM CAA":
+              esforcoTotal = 1962;
+              break;
+          }
+        }
+      }
 
       esforcosTotais[`${cabo.name}_${index}`] = {
         esforcoTotal,

@@ -15,7 +15,7 @@ export type CaboFormField = {
   porcentagemDaFlecha: number | null;
   flecha: number | null;
   tipoDeCabo: string | null;
-  tipoDeCaboSelecionado: string | null;
+  tipoDeCaboSelecionado: "fibra" | "bt" | "mt" | null;
 };
 
 interface CaboFormProps {
@@ -87,7 +87,7 @@ export function CaboForm({ id, fields, setFields, removeCabo, temperatura }: Cab
         <RadioGroup
           defaultValue="fibra"
           className="flex items-center space-x-2"
-          onValueChange={(value) => setFields({ ...fields, tipoDeCaboSelecionado: value, flecha: null, porcentagemDaFlecha: null })}
+          onValueChange={(value) => setFields({ ...fields, tipoDeCaboSelecionado: value as "fibra" | "bt" | "mt", flecha: null, porcentagemDaFlecha: null })}
         >
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="fibra" id="fibra" />
@@ -141,8 +141,8 @@ export function CaboForm({ id, fields, setFields, removeCabo, temperatura }: Cab
                 <SelectContent>
                   <SelectGroup>
                     {cabosBT.map((cabo, idx) => (
-                      <SelectItem key={idx} value={cabo.condutor}>
-                        {cabo.condutor}
+                      <SelectItem key={idx} value={cabo.name}>
+                        {cabo.name}
                       </SelectItem>
                     ))}
                   </SelectGroup>
@@ -165,8 +165,8 @@ export function CaboForm({ id, fields, setFields, removeCabo, temperatura }: Cab
                 <SelectContent>
                   <SelectGroup>
                     {cabosMT.map((cabo, idx) => (
-                      <SelectItem key={idx} value={cabo.bitola}>
-                        {cabo.bitola}
+                      <SelectItem key={idx} value={cabo.name}>
+                        {cabo.name}
                       </SelectItem>
                     ))}
                   </SelectGroup>

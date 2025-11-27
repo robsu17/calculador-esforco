@@ -4,18 +4,6 @@ type Cabo = {
     diameter: number;
 }
 
-type CaboBT = {
-    condutor: string;
-    diametro: number;
-    massa: number;
-}
-
-type CaboMT = {
-    bitola: string;
-    diametro: number;
-    massa: number;
-}
-
 export const cabosFibra: Cabo[] = [
     {
         name: 'CFOA-SM-AS200-12F',
@@ -39,53 +27,53 @@ export const cabosFibra: Cabo[] = [
     }
 ];
 
-export const cabosBT: CaboBT[] = [
+export const cabosBT: Cabo[] = [
     {
-        condutor: "3x35+1x54,6",
-        diametro: 0.037,
-        massa: 0.7
+        name: "3x35+1x54,6",
+        diameter: 0.037,
+        weight: 0.7
     },
     {
-        condutor: "3x50+1x54,6",
-        diametro: 0.037,
-        massa: 0.765
+        name: "3x50+1x54,6",
+        diameter: 0.037,
+        weight: 0.765
     },
     {
-        condutor: "3x95+1x54,6",
-        diametro: 0.043,
-        massa: 1.27
+        name: "3x95+1x54,6",
+        diameter: 0.043,
+        weight: 1.27
     },
     {
-        condutor: "3x150+1x80",
-        diametro: 0.051,
-        massa: 1.878
+        name: "3x150+1x80",
+        diameter: 0.051,
+        weight: 1.878
     }
 ];
 
-export const cabosMT: CaboMT[] = [
+export const cabosMT: Cabo[] = [
     {
-        bitola: "4AWG CAA ou 4AWG CAA/AW",
-        diametro: 0.00636,
-        massa: 0.0855
+        name: "4AWG CAA ou 4AWG CAA/AW",
+        diameter: 0.00636,
+        weight: 0.0855
     },
     {
-        bitola: "1/0AWG CAA ou 1/0AWG CAA/AW",
-        diametro: 0.01011,
-        massa: 0.2161
+        name: "1/0AWG CAA ou 1/0AWG CAA/AW",
+        diameter: 0.01011,
+        weight: 0.2161
     },
     {
-        bitola: "2/0AWG CAA",
-        diametro: 0.01134,
-        massa: 0.2718
+        name: "2/0AWG CAA",
+        diameter: 0.01134,
+        weight: 0.2718
     },
     {
-        bitola: "266,8MCM CAA ou 266,8MCM CAA/AW",
-        diametro: 0.01628,
-        massa: 0.5445
+        name: "266,8MCM CAA ou 266,8MCM CAA/AW",
+        diameter: 0.01628,
+        weight: 0.5445
     },
     {
-        bitola: "336,4MCM CAA",
-        diametro: 0.01831,
-        massa: 0.6887
+        name: "336,4MCM CAA",
+        diameter: 0.01831,
+        weight: 0.6887
     }
 ];
