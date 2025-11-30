@@ -66,14 +66,4 @@ export const cabosMT: Cabo[] = [
         diameter: 0.01134,
         weight: 0.2718
     },
-    {
-        name: "266,8MCM CAA ou 266,8MCM CAA/AW",
-        diameter: 0.01628,
-        weight: 0.5445
-    },
-    {
-        name: "336,4MCM CAA",
-        diameter: 0.01831,
-        weight: 0.6887
-    }
 ];

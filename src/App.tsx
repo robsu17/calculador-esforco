@@ -123,12 +123,6 @@ export default function App() {
       }
 
       let esforcoTotal = tracaoInicial + cargaDoVento
-      let esforcoRefletido = esforcoTotal * 1;
-      if (caboForm.tipoDeCaboSelecionado === "fibra") {
-        esforcoRefletido = esforcoTotal * poste.fatorMultiplicacao
-      }
-      const esforcoRefletidoX = Math.cos(grausParaRadianos(caboForm.angulo || 1)) * esforcoRefletido
-      const esforcoRefletidoY = Math.sin(grausParaRadianos(caboForm.angulo || 1)) * esforcoRefletido
 
       if (
         (caboForm.tipoDeCaboSelecionado === "bt" ||
@@ -162,22 +156,23 @@ export default function App() {
             case "2/0AWG CAA":
               esforcoTotal = 771;
               break;
-            case "266,8MCM CAA ou 266,8MCM CAA/AW":
-              esforcoTotal = 1539;
-              break;
-            case "336,4MCM CAA":
-              esforcoTotal = 1962;
-              break;
           }
         }
       }
+
+      let esforcoRefletido = esforcoTotal * 1;
+      if (caboForm.tipoDeCaboSelecionado === "fibra") {
+        esforcoRefletido = esforcoTotal * poste.fatorMultiplicacao
+      }
+      const esforcoRefletidoX = Math.cos(grausParaRadianos(caboForm.angulo || 1)) * esforcoRefletido
+      const esforcoRefletidoY = Math.sin(grausParaRadianos(caboForm.angulo || 1)) * esforcoRefletido
 
       esforcosTotais[`${cabo.name}_${index}`] = {
         esforcoTotal,
         esforcoRefletidoX,
         esforcoRefletidoY,
       }
-    })
+    });
 
     const esforcoResultanteX = Object.values(esforcosTotais).reduce((acc, c) => acc + c.esforcoRefletidoX, 0)
     const esforcoResultanteY = Object.values(esforcosTotais).reduce((acc, c) => acc + c.esforcoRefletidoY, 0)
@@ -208,7 +203,7 @@ export default function App() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <Card className="bg-white rounded-2xl shadow-xl border border-gray-200">
                 <CardHeader className="pb-4 border-b">
-                  <CardTitle className="text-lg font-semibold text-gray-700">Configuração do Ambiente</CardTitle>
+                  <CardTitle className="text-lg font-semibold text-gray-700">Parâmetros de Entrada do Sistema</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <AmbienteForm
