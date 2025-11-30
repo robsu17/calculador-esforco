@@ -66,8 +66,8 @@ export function AmbienteForm({ setPressaoDinamicaRef, setTemperatura, setAlturaP
                         <Label htmlFor="temperatura">Temperatura coincidente ({field.temperatura}°C)</Label>
                         <Slider
                             defaultValue={[field.temperatura]}
-                            min={-20}
-                            max={55}
+                            min={0}
+                            max={50}
                             step={1}
                             onValueChange={(e) => setFields(state => ({
                                 ...state,
@@ -126,7 +126,7 @@ export function AmbienteForm({ setPressaoDinamicaRef, setTemperatura, setAlturaP
                     </div>
                 </div>
                 <div className="space-y-2">
-                    <Label>Esforço do poste (daN)</Label>
+                    <Label>Carga Nominal do Poste (daN)</Label>
                     <Select
                         defaultValue={field.esforcoPoste.toString()}
                         onValueChange={(value) =>

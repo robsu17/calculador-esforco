@@ -201,7 +201,7 @@ export function DiagramaPoste({ caboForms, resultadoFinal, esforcosCabo, esforco
 
                         if (!esforcoData) return null;
 
-                        const esforcoTotal = Math.sqrt(esforcoData.esforcoRefletidoX ** 2 + esforcoData.esforcoRefletidoY ** 2);
+                        // const esforcoTotal = Math.sqrt(esforcoData.esforcoRefletidoX ** 2 + esforcoData.esforcoRefletidoY ** 2);
 
                         return (
                             <div key={index} className="flex items-center justify-between gap-2 text-xs">
@@ -215,7 +215,7 @@ export function DiagramaPoste({ caboForms, resultadoFinal, esforcosCabo, esforco
                                     </span>
                                 </div>
                                 <span className="font-medium text-gray-800">
-                                    {esforcoTotal.toFixed(1)} N
+                                    {esforcoData.esforcoTotal.toFixed(1)} N
                                 </span>
                             </div>
                         );
