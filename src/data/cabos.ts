@@ -20,11 +20,6 @@ export const cabosFibra: Cabo[] = [
         weight: 0.042,
         diameter: 0.0068
     },
-    {
-        name: 'Cordoalha',
-        weight: 0.030,
-        diameter: 0.006
-    }
 ];
 
 export const cabosBT: Cabo[] = [
