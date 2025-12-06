@@ -103,9 +103,9 @@ export function getFlecha(temperatura: number, vao: number, tipo: 'bt' | 'mt', c
   });
 
   // Encontrar o vão mais próximo
-  const vaoMaisProximo = vaos.reduce((prev, curr) => {
-    return (Math.abs(curr - vao) < Math.abs(prev - vao) ? curr : prev);
-  });
+  const vaoMaisProximo = vaos.find(v => v >= vao) ?? vaos[vaos.length - 1];
+
+  console.log(tabela[tempMaisProxima]?.[vaoMaisProximo])
 
   return tabela[tempMaisProxima]?.[vaoMaisProximo] ?? null;
 }
