@@ -118,7 +118,7 @@ export default function App() {
       let tracaoInicial = (cabo.weight * (caboForm.vao ** 2)) / denominador
       const cargaDoVento = pressaoDinamicaRef * cabo.diameter * (caboForm.vao / 2)
 
-      if (caboForm.tipoDeCaboSelecionado === "mt" && caboForm.vao < 45) {
+      if (caboForm.tipoDeCaboSelecionado === "mt" && caboForm.vao <= 45) {
         tracaoInicial = tracaoInicial * 3;
       }
 
