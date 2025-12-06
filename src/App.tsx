@@ -49,7 +49,7 @@ export default function App() {
     if (
       caboForms.length > 0 &&
       (
-        !ultimo?.angulo ||
+        ultimo?.angulo === null ||
         (!ultimo?.porcentagemDaFlecha && !ultimo?.flecha) ||
         !ultimo?.tipoDeCabo ||
         !ultimo?.vao ||
@@ -67,7 +67,7 @@ export default function App() {
   const calculaTracaoInicial = () => {
     const ultimo = caboForms[caboForms.length - 1]
     if (
-      !ultimo?.angulo ||
+      ultimo?.angulo === null ||
       (!ultimo?.porcentagemDaFlecha && !ultimo?.flecha) ||
       !ultimo?.tipoDeCabo ||
       !ultimo?.vao ||
@@ -164,8 +164,8 @@ export default function App() {
       if (caboForm.tipoDeCaboSelecionado === "fibra") {
         esforcoRefletido = esforcoTotal * poste.fatorMultiplicacao
       }
-      const esforcoRefletidoX = Math.cos(grausParaRadianos(caboForm.angulo || 1)) * esforcoRefletido
-      const esforcoRefletidoY = Math.sin(grausParaRadianos(caboForm.angulo || 1)) * esforcoRefletido
+      const esforcoRefletidoX = Math.cos(grausParaRadianos(caboForm.angulo ?? 1)) * esforcoRefletido
+      const esforcoRefletidoY = Math.sin(grausParaRadianos(caboForm.angulo ?? 1)) * esforcoRefletido
 
       esforcosTotais[`${cabo.name}_${index}`] = {
         esforcoTotal,
