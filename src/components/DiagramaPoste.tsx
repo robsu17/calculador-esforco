@@ -211,7 +211,7 @@ export function DiagramaPoste({ caboForms, resultadoFinal, esforcosCabo, esforco
                                         style={{ backgroundColor: cor }}
                                     />
                                     <span className="text-gray-600">
-                                        Cabo {caboForm.id}({caboForm.tipoDeCaboSelecionado?.toUpperCase()}) - {caboForm.tipoDeCabo} ({caboForm.angulo}°) - {caboForm.vao}m
+                                        Cabo {caboForm.id} ({caboForm.tipoDeCaboSelecionado?.toUpperCase()}) - {caboForm.tipoDeCabo} ({caboForm.angulo}°) - {caboForm.vao}m
                                     </span>
                                 </div>
                                 <span className="font-medium text-gray-800">
