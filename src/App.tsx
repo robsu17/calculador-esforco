@@ -39,7 +39,7 @@ export default function App() {
   const [esforcoPoste, setEsforcoPoste] = useState(300)
   const caboIdCounter = useRef(0)
 
-  const grausParaRadianos = (graus: number) => graus * (Math.PI / 180)
+  // const grausParaRadianos = (graus: number) => graus * (Math.PI / 180)
   const radianosParaGraus = (radianos: number) => radianos * (180 / Math.PI)
 
   const EPS = 1e-10
