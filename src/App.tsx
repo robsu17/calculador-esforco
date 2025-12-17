@@ -160,9 +160,17 @@ export default function App() {
         }
       }
 
-      let esforcoRefletido = esforcoTotal * 1;
-      if (caboForm.tipoDeCaboSelecionado === "fibra") {
-        esforcoRefletido = esforcoTotal * poste.fatorMultiplicacao
+      let esforcoRefletido: number;
+      switch (caboForm.tipoDeCaboSelecionado) {
+        case "fibra":
+          esforcoRefletido = esforcoTotal * poste.fatorMultiplicacao
+          break;
+        case "bt": 
+          esforcoRefletido = esforcoTotal * poste.fatorMultiplicacaoBT
+          break;
+        default:
+          esforcoRefletido = esforcoTotal * 1; 
+          break;
       }
       const esforcoRefletidoX = Math.cos(grausParaRadianos(caboForm.angulo ?? 1)) * esforcoRefletido
       const esforcoRefletidoY = Math.sin(grausParaRadianos(caboForm.angulo ?? 1)) * esforcoRefletido
