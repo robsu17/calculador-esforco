@@ -42,6 +42,19 @@ export default function App() {
   const grausParaRadianos = (graus: number) => graus * (Math.PI / 180)
   const radianosParaGraus = (radianos: number) => radianos * (180 / Math.PI)
 
+  const EPS = 1e-10
+
+  const trig = {
+    sin: (graus: number) => {
+      const v = Math.sin(graus * Math.PI / 180)
+      return Math.abs(v) < EPS ? 0 : v
+    },
+    cos: (graus: number) => {
+      const v = Math.cos(graus * Math.PI / 180)
+      return Math.abs(v) < EPS ? 0 : v
+    }
+  }
+
   const removeCabo = (id: number) => setCaboForms(prev => prev.filter(c => c.id !== id))
 
   const handleAddNewCabo = () => {
@@ -172,8 +185,9 @@ export default function App() {
           esforcoRefletido = esforcoTotal * 1; 
           break;
       }
-      const esforcoRefletidoX = Math.cos(grausParaRadianos(caboForm.angulo ?? 1)) * esforcoRefletido
-      const esforcoRefletidoY = Math.sin(grausParaRadianos(caboForm.angulo ?? 1)) * esforcoRefletido
+      
+      const esforcoRefletidoX = trig.cos(caboForm.angulo ?? 1) * esforcoRefletido
+      const esforcoRefletidoY = trig.sin(caboForm.angulo ?? 1) * esforcoRefletido
 
       esforcosTotais[`${cabo.name}_${index}`] = {
         esforcoTotal,
